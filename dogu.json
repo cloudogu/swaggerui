@@ -1,0 +1,25 @@
+{
+  "Name": "testing/swagger-ui",
+  "Version": "1.13.1-7",
+  "DisplayName": "Swagger-UI",
+  "Description": "Swagger-UI displays your openAPI specification.",
+  "Logo": "https://cloudogu.com/images/dogus/nginx.png",
+  "Category": "Development Apps",
+  "Tags": [
+    "warp"
+  ],
+  "Url": "http://swagger.io/",
+  "Image": "registry.cloudogu.com/testing/swagger-ui",
+  "Dependencies": [
+    "nginx"
+  ],
+  "ExposedPorts": [{
+    "Type": "tcp",
+    "Host": 8080,
+    "Container": 8080
+  }],
+  "HealthChecks": [{
+    "Type": "tcp",
+    "Port": 8080
+  }]
+}

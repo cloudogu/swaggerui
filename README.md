@@ -1,2 +1,2 @@
-# swaggerui
-Swagger UI Dogu for Cloudogu EcoSystem
+# Swagger UI
+Swagger UI Dogu for the Cloudogu EcoSystem
