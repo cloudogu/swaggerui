@@ -5,11 +5,6 @@ file:
     owner: root
     group: root
     filetype: file
-port:
-  tcp:8080:
-    listening: true
-    ip:
-    - 0.0.0.0
 user:
   nginx:
     exists: true
