@@ -1,29 +1,3 @@
-file:
-  /startup.sh:
-    exists: true
-    mode: "0755"
-    owner: root
-    group: root
-    filetype: file
-  /usr/sbin/nginx:
-    exists: true
-    mode: "0755"
-    owner: root
-    group: root
-    filetype: file
-port:
-  tcp:8080:
-    listening: true
-    ip:
-    - 0.0.0.0
-user:
+package:
   nginx:
-    exists: true
-    groups:
-    - nginx
-group:
-  nginx:
-    exists: true
-process:
-  nginx:
-    running: true
+    installed: true
