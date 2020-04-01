@@ -18,20 +18,17 @@ afterEach(async () => {
     await driver.quit();
 });
 
-
 describe('Swagger UI browser tests', () => {
-
-    test('call page without login', async() => {
-        await driver.get(config.baseUrl + config.swaggerUIContextPath);
+    test('call page without login', async () => {
+        let dogu_url = config.baseUrl + config.swaggerUIContextPath;
+        await driver.get(dogu_url);
         const url = await driver.getCurrentUrl();
-        expect(url).toBe(config.baseUrl + config.swaggerUIContextPath + "/")
+        expect(url).toMatch(dogu_url);
+        await driver.wait(until.elementLocated(By.id('swagger-ui')), 5000);
     });
 
-    test('landing page has no swagger spec loaded', async() => {
+    test('landing page has no swagger spec loaded', async () => {
         await driver.get(config.baseUrl + config.swaggerUIContextPath);
         await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'loading-container')]/h4[text() = 'No API definition provided.']")), 5000);
-        let downloadUrlInput = await driver.find(By.className('download-url-input'))
-        expect(downloadUrlInput.value).toEqual("")
     });
-
 });

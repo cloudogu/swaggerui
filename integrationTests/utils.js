@@ -6,11 +6,11 @@ const By = webdriver.By;
 const chromeCapabilities = webdriver.Capabilities.chrome();
 
 const chromeOptions = {
-    'args': ['--test-type', '--start-maximized']
+    'args': ['--test-type', '--start-maximized', '--ignore-certificate-errors']
 };
 
 chromeCapabilities.set('chromeOptions', chromeOptions);
-chromeCapabilities.set('name', 'Redmine ITs');
+chromeCapabilities.set('name', 'Swagger UI');
 // set filename pattern for zalenium videos
 chromeCapabilities.set("testFileNameTemplate", "{testName}_{testStatus}");
 
