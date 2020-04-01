@@ -12,14 +12,13 @@ LABEL NAME="official/swagger-ui" \
       VERSION="3.25.0-0" \
       maintainer="christian.beyer@cloudogu.com"
 
-ENV SERVICE_TAGS=webapp \
-    SUB_URI=/swagger-ui
+ENV SERVICE_TAGS=webapp
 
 RUN set -x \
     # install required packages
-    apk --update add openssl pcre zlib nginx \
+ && apk --update add openssl pcre zlib nginx \
     # redirect logs
-    ln -sf /dev/stdout /var/log/nginx/access.log \
+ && ln -sf /dev/stdout /var/log/nginx/access.log \
  && ln -sf /dev/stderr /var/log/nginx/error.log \
     # cleanup apk cache
  && rm -rf /var/cache/apk/*
