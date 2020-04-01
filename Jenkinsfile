@@ -25,12 +25,12 @@ node('vagrant') {
         try {
 
             stage('Provision') {
-                ecoSystem.provision("/dogu");
+                ecoSystem.provision("/dogu")
             }
 
             stage('Setup') {
                 ecoSystem.loginBackend('cesmarvin-setup')
-                ecoSystem.setup([])
+                ecoSystem.setup()
 
             }
 

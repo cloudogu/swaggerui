@@ -5,10 +5,11 @@ set -o pipefail
 
 source /etc/ces/functions.sh
 
-#echo "[nginx] configure ssl and https ..."
-#doguctl config --global certificate/server.crt > "/etc/ssl/server.crt"
-#doguctl config --global certificate/server.key > "/etc/ssl/server.key"
+NGINX_ROOT=/var/www/html
+INDEX_FILE=$NGINX_ROOT/index.html
 
+# remove swagger.json from index.html
+sed -i "s|https://petstore.swagger.io/v2/swagger.json||g" $INDEX_FILE
 
 # Start nginx
 echo "[nginx] starting nginx service..."
