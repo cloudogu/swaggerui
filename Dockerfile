@@ -1,11 +1,8 @@
 FROM node:10 AS build
 ENV SWAGGER_UI_TAG_VERSION=v3.25.0
-WORKDIR /usr/share/build
-RUN git clone https://github.com/cloudogu/swagger-ui.git \
- && cd swagger-ui \
- && git checkout ${SWAGGER_UI_TAG_VERSION} \
- && npm i \
- && npm run build
+COPY / /usr/share/build/
+WORKDIR /usr/share/build/swagger-ui
+RUN npm i && npm run build
 
 FROM registry.cloudogu.com/official/base:3.10.3-2
 LABEL NAME="official/swagger-ui" \
