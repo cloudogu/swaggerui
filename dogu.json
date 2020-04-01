@@ -1,7 +1,7 @@
 {
-  "Name": "testing/swagger-ui",
-  "Version": "1.13.1-7",
-  "DisplayName": "Swagger-UI",
+  "Name": "official/swaggerui",
+  "Version": "3.25.0-0",
+  "DisplayName": "Swagger UI",
   "Description": "Swagger-UI displays your openAPI specification.",
   "Logo": "https://cloudogu.com/images/dogus/nginx.png",
   "Category": "Development Apps",
@@ -9,7 +9,7 @@
     "warp"
   ],
   "Url": "http://swagger.io/",
-  "Image": "registry.cloudogu.com/testing/swagger-ui",
+  "Image": "registry.cloudogu.com/official/swaggerui",
   "Dependencies": [
     "nginx"
   ],
