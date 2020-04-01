@@ -5,7 +5,7 @@ WORKDIR /usr/share/build/swagger-ui
 RUN npm i && npm run build
 
 FROM registry.cloudogu.com/official/base:3.10.3-2
-LABEL NAME="official/swagger-ui" \
+LABEL NAME="official/swaggerui" \
       VERSION="3.25.0-0" \
       maintainer="christian.beyer@cloudogu.com"
 

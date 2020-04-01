@@ -2,7 +2,7 @@
   "Name": "official/swaggerui",
   "Version": "3.25.0-0",
   "DisplayName": "Swagger UI",
-  "Description": "Swagger-UI displays your openAPI specification.",
+  "Description": "Swagger UI displays your openAPI specification.",
   "Logo": "https://cloudogu.com/images/dogus/nginx.png",
   "Category": "Development Apps",
   "Tags": [
@@ -13,11 +13,6 @@
   "Dependencies": [
     "nginx"
   ],
-  "ExposedPorts": [{
-    "Type": "tcp",
-    "Host": 8080,
-    "Container": 8080
-  }],
   "HealthChecks": [{
     "Type": "tcp",
     "Port": 8080

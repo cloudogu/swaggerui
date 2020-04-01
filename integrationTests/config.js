@@ -12,7 +12,7 @@ if (!webdriverType) {
 module.exports = {
     fqdn: cesFqdn,
     baseUrl: 'https://' + cesFqdn,
-    swaggerUIContextPath: '/swagger-ui',
+    swaggerUIContextPath: '/swaggerui',
     webdriverType: webdriverType,
     debug: true,
 };
