@@ -12,8 +12,10 @@ LABEL NAME="official/swagger-ui" \
 ENV SERVICE_TAGS=webapp
 
 RUN set -x \
-    # install required packages
+ # install required packages
  && apk --update add openssl pcre zlib nginx \
+ # change owner of nginx binary
+ && chown root:root /usr/sbin/nginx \
     # redirect logs
  && ln -sf /dev/stdout /var/log/nginx/access.log \
  && ln -sf /dev/stderr /var/log/nginx/error.log \
