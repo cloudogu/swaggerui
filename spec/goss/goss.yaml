@@ -1,3 +1,14 @@
+file:
+  /startup.sh:
+    exists: true
+    owner: root
+    group: root
+    filetype: file
+  /var/www/html/index.html:
+    exists: true
+    owner: root
+    group: root
+    filetype: file
 user:
   nginx:
     exists: true
