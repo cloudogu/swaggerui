@@ -20,11 +20,11 @@ RUN set -x \
  && ln -sf /dev/stdout /var/log/nginx/access.log \
  && ln -sf /dev/stderr /var/log/nginx/error.log \
     # cleanup apk cache
- && rm -rf /var/cache/apk/*
+ && rm -rf /var/cache/apk/* \
+ && mkdir -p /var/www/html
 
 # copy files
 COPY resources /
-WORKDIR /var/www/html
 COPY --from=build /usr/share/build/swagger-ui/dist/* /var/www/html/
 
 # Define working directory.
@@ -32,6 +32,8 @@ WORKDIR /etc/nginx
 
 # Define default command.
 CMD ["/startup.sh"]
+
+HEALTHCHECK CMD doguctl healthy swaggerui || exit 1
 
 # Expose ports.
 EXPOSE 8080
