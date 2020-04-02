@@ -1,12 +1,11 @@
 FROM node:10 AS build
-ENV SWAGGER_UI_TAG_VERSION=v3.25.0
 COPY / /usr/share/build/
 WORKDIR /usr/share/build/swagger-ui
 RUN npm i && npm run build
 
 FROM registry.cloudogu.com/official/base:3.10.3-2
 LABEL NAME="official/swaggerui" \
-      VERSION="3.25.0-0" \
+      VERSION="3.25.0-1" \
       maintainer="christian.beyer@cloudogu.com"
 
 ENV SERVICE_TAGS=webapp

@@ -1,6 +1,6 @@
 {
   "Name": "official/swaggerui",
-  "Version": "3.25.0-0",
+  "Version": "3.25.0-1",
   "DisplayName": "Swagger UI",
   "Description": "Swagger UI displays your openAPI specification.",
   "Logo": "https://cloudogu.com/images/dogus/nginx.png",
@@ -8,7 +8,7 @@
   "Tags": [
     "warp"
   ],
-  "Url": "http://swagger.io/",
+  "Url": "http://swagger.io/tools/swagger-ui/",
   "Image": "registry.cloudogu.com/official/swaggerui",
   "Dependencies": [
     "nginx"
