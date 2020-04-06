@@ -1,7 +1,11 @@
 FROM node:10 AS build
-COPY / /usr/share/build/
+# separate COPY and RUN commands to use docker build cache
+COPY swagger-ui/package.json /usr/share/build/swagger-ui/package.json
+COPY swagger-ui/package-lock.json /usr/share/build/swagger-ui/package-lock.json
 WORKDIR /usr/share/build/swagger-ui
-RUN npm i && npm run build
+RUN npm i
+COPY / /usr/share/build/
+RUN npm run build
 
 FROM registry.cloudogu.com/official/base:3.10.3-2
 LABEL NAME="official/swaggerui" \
@@ -11,6 +15,7 @@ LABEL NAME="official/swaggerui" \
 ENV SERVICE_TAGS=webapp
 
 RUN set -x \
+ && apk update \
  # install required packages
  && apk --update add openssl pcre zlib nginx \
  # change owner of nginx binary
@@ -28,6 +33,8 @@ COPY --from=build /usr/share/build/swagger-ui/dist/* /var/www/html/
 
 # Define working directory.
 WORKDIR /etc/nginx
+
+VOLUME ["/var/log/nginx"]
 
 # Define default command.
 CMD ["/startup.sh"]
