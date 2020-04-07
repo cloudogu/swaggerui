@@ -21,6 +21,7 @@ node('vagrant') {
 
         stage('Lint') {
             lintDockerfile()
+            shellCheck("./resources/startup.sh")
         }
 
         try {
