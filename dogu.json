@@ -16,5 +16,7 @@
   "HealthChecks": [{
     "Type": "tcp",
     "Port": 8080
+  },{
+    "Type": "state"
   }]
 }
