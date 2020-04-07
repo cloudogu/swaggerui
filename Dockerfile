@@ -34,8 +34,6 @@ COPY --from=build /usr/share/build/swagger-ui/dist/* /var/www/html/
 # Define working directory.
 WORKDIR /etc/nginx
 
-VOLUME ["/var/log/nginx"]
-
 HEALTHCHECK CMD doguctl healthy swaggerui || exit 1
 
 # Expose ports.
