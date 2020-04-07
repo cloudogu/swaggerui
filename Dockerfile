@@ -36,10 +36,10 @@ WORKDIR /etc/nginx
 
 VOLUME ["/var/log/nginx"]
 
-# Define default command.
-CMD ["/startup.sh"]
-
 HEALTHCHECK CMD doguctl healthy swaggerui || exit 1
 
 # Expose ports.
 EXPOSE 8080
+
+# Define default command.
+CMD ["/startup.sh"]
