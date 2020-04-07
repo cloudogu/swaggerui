@@ -6,7 +6,7 @@
   "Logo": "https://cloudogu.com/images/dogus/nginx.png",
   "Category": "Development Apps",
   "Tags": [
-    "warp"
+    "warp", "REST", "API", "OpenAPI"
   ],
   "Url": "http://swagger.io/tools/swagger-ui/",
   "Image": "registry.cloudogu.com/official/swaggerui",
