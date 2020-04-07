@@ -3,8 +3,6 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-source /etc/ces/functions.sh
-
 NGINX_ROOT=/var/www/html
 INDEX_FILE=$NGINX_ROOT/index.html
 
