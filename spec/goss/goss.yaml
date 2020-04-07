@@ -20,6 +20,11 @@ group:
 process:
   nginx:
     running: true
+port:
+  tcp:8080:
+    listening: true
+    ip:
+      - 0.0.0.0
 package:
   nginx:
     installed: true
