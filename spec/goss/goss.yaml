@@ -23,3 +23,10 @@ process:
 package:
   nginx:
     installed: true
+  openssl:
+    installed: true
+  pcre:
+    installed: true
+  zlib:
+    installed: true
+
