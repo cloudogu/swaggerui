@@ -1,0 +1,37 @@
+file:
+  /startup.sh:
+    exists: true
+    owner: root
+    group: root
+    filetype: file
+  /var/www/html/index.html:
+    exists: true
+    owner: root
+    group: root
+    filetype: file
+user:
+  nginx:
+    exists: true
+    groups:
+    - nginx
+group:
+  nginx:
+    exists: true
+process:
+  nginx:
+    running: true
+port:
+  tcp:8080:
+    listening: true
+    ip:
+      - 0.0.0.0
+package:
+  nginx:
+    installed: true
+  openssl:
+    installed: true
+  pcre:
+    installed: true
+  zlib:
+    installed: true
+
