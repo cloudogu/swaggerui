@@ -9,7 +9,7 @@ RUN npm run build
 
 FROM registry.cloudogu.com/official/base:3.10.3-2
 LABEL NAME="official/swaggerui" \
-      VERSION="3.25.0-1" \
+      VERSION="3.25.0-2" \
       maintainer="christian.beyer@cloudogu.com"
 
 ENV SERVICE_TAGS=webapp
