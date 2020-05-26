@@ -42,8 +42,8 @@
             url: "",
             dom_id: '#swagger-ui',
             deepLinking: true,
-            {{ if .Config.Exists "validator.url" }}
-            validatorUrl: "{{ .Config.Get "validator.url"}}",
+            {{ if .Config.Exists "validator_url" }}
+            validatorUrl: "{{ .Config.Get "validator_url"}}",
             {{ else }}
             validatorUrl: null,
             {{ end }}

@@ -18,7 +18,7 @@
   ],
   "Configuration": [
     {
-      "Name": "validator.url",
+      "Name": "validator_url",
       "Description": "Set the url of the swaggerui validator.",
       "Optional": true
     }
