@@ -16,6 +16,13 @@
   "Dependencies": [
     "nginx"
   ],
+  "Configuration": [
+    {
+      "Name": "validator_url",
+      "Description": "Set the url of the swaggerui validator.",
+      "Optional": true
+    }
+  ],
   "HealthChecks": [
     {
       "Type": "tcp",
