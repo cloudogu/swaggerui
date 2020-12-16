@@ -10,7 +10,7 @@
     "chromedriver": "^80.0.2",
     "jest": "^25.2.7",
     "jest-junit": "^10.0.0",
-    "selenium-webdriver": "4.0.0-alpha.7"
+    "selenium-webdriver": "3.6.0"
   },
   "jest-junit": {
     "suiteName": "Integration Tests",
