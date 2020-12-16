@@ -14,6 +14,7 @@
   },
   "jest-junit": {
     "suiteName": "Integration Tests",
-    "output": "./it-results.xml"
+    "outputDirectory": ".",
+    "outputName": "it-results.xml"
   }
 }
