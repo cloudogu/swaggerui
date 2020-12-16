@@ -55,7 +55,7 @@ node('vagrant') {
             }
 
             stage('Integration Tests') {
-                ecoSystem.runYarnIntegrationTests(15, 'node:8.14.0-stretch', [], params.EnableVideoRecording)
+                ecoSystem.runYarnIntegrationTests(15, 'node:10.19.0-stretch', [], params.EnableVideoRecording)
             }
 
             if (isReleaseBranch()) {
