@@ -1,5 +1,5 @@
 #!groovy
-@Library(['github.com/cloudogu/dogu-build-lib@v1.0.0', 'github.com/cloudogu/zalenium-build-lib@30923630', 'github.com/cloudogu/ces-build-lib@a46de28']) _
+@Library(['github.com/cloudogu/dogu-build-lib@v1.1.1', 'github.com/cloudogu/zalenium-build-lib@v2.1.0', 'github.com/cloudogu/ces-build-lib@a46de28']) _
 import com.cloudogu.ces.dogubuildlib.*
 import com.cloudogu.ces.cesbuildlib.*
 
@@ -11,9 +11,11 @@ node('vagrant') {
                 // Keep only the last x builds to preserve space
                 buildDiscarder(logRotator(numToKeepStr: '10')),
                 // Don't run concurrent builds for a branch, because they use the same workspace directory
-                disableConcurrentBuilds()
+                disableConcurrentBuilds(),
+                parameters([
+                        booleanParam(defaultValue: false, description: 'Enables the video recording during the test execution', name: 'EnableVideoRecording'),
+                ])
         ])
-
         EcoSystem ecoSystem = new EcoSystem(this, "gcloud-ces-operations-internal-packer", "jenkins-gcloud-ces-operations-internal")
 
         stage('Checkout') {
@@ -53,34 +55,7 @@ node('vagrant') {
             }
 
             stage('Integration Tests') {
-
-                String externalIP = ecoSystem.externalIP
-
-                if (fileExists('integrationTests/it-results.xml')) {
-                    sh 'rm -f integrationTests/it-results.xml'
-                }
-
-                timeout(time: 15, unit: 'MINUTES') {
-
-                    try {
-
-                        withZalenium { zaleniumIp ->
-
-                            dir('integrationTests') {
-
-                                docker.image('node:10.19.0-stretch').inside("-e WEBDRIVER=remote -e CES_FQDN=${externalIP} -e SELENIUM_BROWSER=chrome -e SELENIUM_REMOTE_URL=http://${zaleniumIp}:4444/wd/hub") {
-                                    sh 'yarn install'
-                                    sh 'yarn run ci-test'
-                                }
-
-                            }
-
-                        }
-                    } finally {
-                        // archive test results
-                        junit allowEmptyResults: true, testResults: 'integrationTests/it-results.xml'
-                    }
-                }
+                ecoSystem.runYarnIntegrationTests(15, 'node:10.19.0-stretch', [], params.EnableVideoRecording)
             }
 
             if (isReleaseBranch()) {

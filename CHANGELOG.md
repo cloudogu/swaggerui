@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Update dogu-build-lib to `v1.1.1`
+- Update zalenium-build-lib to `v2.1.0`
+- toggle video recording with build parameter (#4)
+
 ## [v3.25.0-1] - 2020-05-26
 ### Added
 - added template for the index page
