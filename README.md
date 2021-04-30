@@ -11,6 +11,8 @@
 
 **Website:** https://swagger.io/tools/swagger-ui/
 
+**Docs:** https://swagger.io/docs/
+
 **Dependencies:** nginx
 
 ## Installation Ecosystem
