@@ -1,4 +1,4 @@
-# Changelog
+# Swagger UI Changelog
 
 All notable changes to this project will be documented in this file.
 
