@@ -1,18 +1,13 @@
-FROM node:10 AS build
-# separate COPY and RUN commands to use docker build cache
-COPY swagger-ui/package.json /usr/share/build/swagger-ui/package.json
-COPY swagger-ui/package-lock.json /usr/share/build/swagger-ui/package-lock.json
-WORKDIR /usr/share/build/swagger-ui
-RUN npm i
-COPY / /usr/share/build/
-RUN npm run build
-
 FROM registry.cloudogu.com/official/base:3.10.3-2
 LABEL NAME="official/swaggerui" \
       VERSION="3.25.0-2" \
       maintainer="christian.beyer@cloudogu.com"
 
-ENV SERVICE_TAGS=webapp
+ENV SERVICE_TAGS=webapp \
+SWAGGERUI_VERSION=3.25.0-1 \
+SWAGGERUI_ZIP_SHA256="2cd256f89e4ef42b523a47b8d8818a838b1969757e371ef1e9903c9ed9888df1"
+
+COPY resources /
 
 RUN set -x \
  && apk update \
@@ -25,12 +20,14 @@ RUN set -x \
  && ln -sf /dev/stderr /var/log/nginx/error.log \
     # cleanup apk cache
  && rm -rf /var/cache/apk/* \
- && mkdir -p /var/www/html
+ && mkdir -p /var/www/html \
+# install swaggerui from fork https://github.com/cloudogu/swagger-ui/releases/ \
+ && curl -Lsk https://github.com/cloudogu/swagger-ui/releases/download/v${SWAGGERUI_VERSION}/swagger-ui-${SWAGGERUI_VERSION}.zip -o /tmp/swagger-ui.zip  \
+ #&& echo "${SWAGGERUI_ZIP_SHA256} */tmp/swagger-ui.zip" | sha256sum -c - \
+ && unzip /tmp/swagger-ui.zip -d /var/www/html
+
 
 # copy files
-COPY resources /
-COPY --from=build /usr/share/build/swagger-ui/dist/* /var/www/html/
-
 # Define working directory.
 WORKDIR /etc/nginx
 
