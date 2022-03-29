@@ -27,8 +27,7 @@ RUN set -x \
  && tar -xf tmp/v3.25.0-1.tar.gz -C tmp/ \
  && cp -a tmp/swagger-ui-3.25.0-1/. var/www/html/ \
  && rm -rf /tmp \
- && mkdir tmp \
- && ls var/www/html/
+ && mkdir tmp
 
 # Define working directory.
 WORKDIR /etc/nginx
