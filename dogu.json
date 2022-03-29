@@ -14,7 +14,10 @@
   "Url": "http://swagger.io/tools/swagger-ui/",
   "Image": "registry.cloudogu.com/official/swaggerui",
   "Dependencies": [
-    "nginx"
+    {
+    "type": "dogu",
+    "name": "nginx"
+    }
   ],
   "Configuration": [
     {
