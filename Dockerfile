@@ -1,7 +1,7 @@
 FROM registry.cloudogu.com/official/base:3.15.3-1
 LABEL NAME="official/swaggerui" \
       VERSION="3.25.0-2" \
-      maintainer="christian.beyer@cloudogu.com"
+      maintainer="hello@cloudogu.com"
 
 ENV SERVICE_TAGS=webapp \
 SWAGGER_UI_VERSION=3.25.0-1 \
