@@ -16,6 +16,7 @@ RUN set -x \
  && apk update \
  # install required packages
  && apk --update add openssl pcre zlib nginx \
+ && apk upgrade \
  # change owner of nginx binary
  && chown root:root /usr/sbin/nginx \
     # redirect logs
