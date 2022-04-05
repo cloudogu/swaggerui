@@ -12,6 +12,9 @@ sed -i "s|https://petstore.swagger.io/v2/swagger.json||g" $INDEX_FILE_PATH
 
 doguctl template "${INDEX_TEMPLATE_PATH}" "${INDEX_FILE_PATH}"
 
+mkdir /var/www/html/swaggerui
+cp -a /var/www/html/dist/. /var/www/html/swaggerui
+
 doguctl state "ready"
 
 # Start nginx
