@@ -1,4 +1,4 @@
-FROM registry.cloudogu.com/official/base:3.10.3-2
+FROM registry.cloudogu.com/official/base:3.15.3-1
 LABEL NAME="official/swaggerui" \
       VERSION="3.25.0-2" \
       maintainer="christian.beyer@cloudogu.com"
