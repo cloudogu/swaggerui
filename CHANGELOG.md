@@ -13,8 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Upgrade base image to 3.15.3-1
 - Changes in the CI process
-   - Update dogu-build-lib to `v1.1.1`
+   - Update dogu-build-lib to `v1.6.0`
    - Update zalenium-build-lib to `v2.1.0`
+   - Upgrade ces-build-lib to v1.52.0
    - toggle video recording with build parameter (#4)
 
 ## [v3.25.0-2] - 2020-05-26
