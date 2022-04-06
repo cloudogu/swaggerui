@@ -4,17 +4,18 @@ LABEL NAME="official/swaggerui" \
       maintainer="hello@cloudogu.com"
 
 ENV SERVICE_TAGS=webapp \
-SWAGGER_UI_VERSION=3.25.0-1 \
-#TODO: download of the swaggerui-code file should be validated
-SWAGGERUI_ZIP_SHA256="2cd256f89e4ef42b523a47b8d8818a838b1969757e371ef1e9903c9ed9888df1"
+SWAGGER_UI_VERSION=3.25.0-1
 
 COPY resources /
 # install swaggerui from fork https://github.com/cloudogu/swagger-ui/releases/ \
-ADD https://github.com/cloudogu/swagger-ui/archive/refs/tags/v$SWAGGER_UI_VERSION.tar.gz /tmp
+ADD https://github.com/cloudogu/swagger-ui/releases/download/v$SWAGGER_UI_VERSION/swagger-ui-$SWAGGER_UI_VERSION.zip /
 
 RUN set -x \
+ # check for checksum of swagger-ui code release | !!Attention: changes on new release \
+ && chmod +x /checksum.sh \
+ && ./checksum.sh \
+ # update and install required packages
  && apk update \
- # install required packages
  && apk --update add openssl pcre zlib nginx \
  && apk upgrade \
  # change owner of nginx binary
@@ -25,10 +26,8 @@ RUN set -x \
     # cleanup apk cache
  && rm -rf /var/cache/apk/* \
     #extract swagger ui code \
- && tar -xf tmp/v3.25.0-1.tar.gz -C tmp/ \
- && cp -a tmp/swagger-ui-3.25.0-1/. var/www/html/ \
- && rm -rf /tmp \
- && mkdir tmp
+ && unzip swagger-ui-$SWAGGER_UI_VERSION.zip  \
+ && cp -a swagger-ui-$SWAGGER_UI_VERSION/. var/www/html/
 
 # Define working directory.
 WORKDIR /etc/nginx
