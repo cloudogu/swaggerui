@@ -7,15 +7,16 @@ RUN npm i
 COPY / /usr/share/build/
 RUN npm run build
 
-FROM registry.cloudogu.com/official/base:3.10.3-2
+FROM registry.cloudogu.com/official/base:3.15.3-1
 LABEL NAME="official/swaggerui" \
       VERSION="3.25.0-2" \
-      maintainer="christian.beyer@cloudogu.com"
+      maintainer="hello@cloudogu.com"
 
 ENV SERVICE_TAGS=webapp
 
-RUN set -x \
+RUN set -x -o errexit -o nounset -o pipefail \
  && apk update \
+ && apk upgrade \
  # install required packages
  && apk --update add openssl pcre zlib nginx \
  # change owner of nginx binary
