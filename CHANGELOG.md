@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - Upgrade ces-build-lib to v1.52.0
    - toggle video recording with build parameter (#4)
 
+### Added
+- make targets
+- configurable swap and memory
+
 ## [v3.25.0-2] - 2020-05-26
 ### Added
 - added template for the index page
