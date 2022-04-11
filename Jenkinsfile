@@ -13,7 +13,10 @@ node('vagrant') {
                 // Don't run concurrent builds for a branch, because they use the same workspace directory
                 disableConcurrentBuilds(),
                 parameters([
-                        booleanParam(defaultValue: false, description: 'Enables the video recording during the test execution', name: 'EnableVideoRecording'),
+                        booleanParam(defaultValue: false, description: 'Test dogu upgrade from latest release or optionally from defined version below', name: 'TestDoguUpgrade'),
+                        booleanParam(defaultValue: true, description: 'Enables cypress to record video of the integration tests.', name: 'EnableVideoRecording'),
+                        booleanParam(defaultValue: true, description: 'Enables cypress to take screenshots of failing integration tests.', name: 'EnableScreenshotRecording'),
+                        string(defaultValue: '', description: 'Old Dogu version for the upgrade test (optional; e.g. 4.1.0-3)', name: 'OldDoguVersionForUpgradeTest'),
                 ])
         ])
         EcoSystem ecoSystem = new EcoSystem(this, "gcloud-ces-operations-internal-packer", "jenkins-gcloud-ces-operations-internal")
@@ -26,7 +29,6 @@ node('vagrant') {
         stage('Lint') {
             lintDockerfile()
             shellCheck("./resources/startup.sh")
-            shellCheck("release.sh")
         }
 
         try {
@@ -55,7 +57,35 @@ node('vagrant') {
             }
 
             stage('Integration Tests') {
-                ecoSystem.runYarnIntegrationTests(15, 'node:12.22.5-stretch', [], params.EnableVideoRecording)
+                runIntegrationTests(ecoSystem, "")
+            }
+
+            if (params.TestDoguUpgrade != null && params.TestDoguUpgrade) {
+                stage('Upgrade dogu') {
+                    // Remove new dogu that has been built and tested above
+                    ecoSystem.purgeDogu(doguName)
+
+                    if (params.OldDoguVersionForUpgradeTest != '' && !params.OldDoguVersionForUpgradeTest.contains('v')) {
+                        println "Installing user defined version of dogu: " + params.OldDoguVersionForUpgradeTest
+                        ecoSystem.installDogu("official/" + doguName + " " + params.OldDoguVersionForUpgradeTest)
+                    } else {
+                        println "Installing latest released version of dogu..."
+                        ecoSystem.installDogu("official/" + doguName)
+                    }
+                    installTestPlugin(ecoSystem, testPluginName)
+                    ecoSystem.startDogu(doguName)
+                    ecoSystem.waitForDogu(doguName)
+                    ecoSystem.upgradeDogu(ecoSystem)
+
+                    // Wait for upgraded dogu to get healthy
+                    ecoSystem.waitForDogu(doguName)
+                    ecoSystem.waitUntilAvailable(doguName)
+                }
+
+                stage('Integration Tests - After Upgrade') {
+                    // Run integration tests again to verify that the upgrade was successful
+                    runIntegrationTests(ecoSystem, "-e TAGS='not @after_plugin_deletion'")
+                }
             }
 
             if (isReleaseBranch()) {
@@ -139,6 +169,15 @@ node('vagrant') {
             }
         }
     }
+}
+
+def runIntegrationTests(EcoSystem ecoSystem, String additionalCypressArgs) {
+    ecoSystem.runCypressIntegrationTests([
+            cypressImage         : "cypress/included:8.7.0",
+            enableVideo          : params.EnableVideoRecording,
+            enableScreenshots    : params.EnableScreenshotRecording,
+            additionalCypressArgs: "${additionalCypressArgs}"
+    ])
 }
 
 String getChangelog(String releaseVersion){
