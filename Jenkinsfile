@@ -173,7 +173,7 @@ node('vagrant') {
 
 def runIntegrationTests(EcoSystem ecoSystem, String additionalCypressArgs) {
     ecoSystem.runCypressIntegrationTests([
-            cypressImage         : "cypress/included:8.7.0",
+            cypressImage         : "cypress/included:9.5.1",
             enableVideo          : params.EnableVideoRecording,
             enableScreenshots    : params.EnableScreenshotRecording,
             additionalCypressArgs: "${additionalCypressArgs}"
