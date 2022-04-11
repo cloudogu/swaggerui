@@ -5,6 +5,7 @@ import com.cloudogu.ces.cesbuildlib.*
 
 node('vagrant') {
     Git git = new Git(this)
+    doguName="swaggerui"
 
     timestamps{
         properties([
