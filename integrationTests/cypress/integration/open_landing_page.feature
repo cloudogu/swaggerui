@@ -1,4 +1,6 @@
 Feature: open swaggerui dogu landing page
 
-  Scenario: a person visits the swaggerui landing page
-    When a person visits fqdn of the swaggerui dogu the Web UI shows up
+  Scenario: The swaggerui dogu is accessed in browser
+    When the swaggerui dogu is visited
+    Then the page is shown without requiring authentication
+    And the warp menu exists
