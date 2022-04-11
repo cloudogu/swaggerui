@@ -21,6 +21,21 @@
   ],
   "Configuration": [
     {
+      "Name": "logging/root",
+      "Description": "Set the root log level to one of ERROR, WARN, INFO, DEBUG.",
+      "Optional": true,
+      "Default": "WARN",
+      "Validation": {
+        "Type": "ONE_OF",
+        "Values": [
+          "WARN",
+          "DEBUG",
+          "INFO",
+          "ERROR"
+        ]
+      }
+    },
+    {
       "Name": "validator_url",
       "Description": "Set the url of the swaggerui validator.",
       "Optional": true

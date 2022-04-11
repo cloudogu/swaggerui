@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade ssl libraries to 1.1.1n-r0 and fix [CVE-2022-0778](https://security.alpinelinux.org/vuln/CVE-2022-0778)
 
 ### Changed
-- Update swagger-ui to 4.9.0-1
+- Update swagger-ui to 4.9.0-1 (#12)
+  - This also includes the change that the google fonts are added to repository (#12) 
+- Add update-test to jenkinsfile (#12)
 - Upgrade base image to 3.15.3-1
 - Changes in the CI process
    - Update dogu-build-lib to `v1.6.0`
