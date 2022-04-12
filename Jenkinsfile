@@ -57,6 +57,12 @@ node('vagrant') {
                 ecoSystem.verify("/dogu")
             }
 
+            stage('Wait for swagger dogu') {
+                timeout(15) {
+                    ecoSystem.waitForDogu("swaggerui")
+                }
+            }
+
             stage('Integration Tests') {
                 runIntegrationTests(ecoSystem)
             }
