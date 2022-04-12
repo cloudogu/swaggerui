@@ -58,7 +58,7 @@ node('vagrant') {
             }
 
             stage('Integration Tests') {
-                runIntegrationTests(ecoSystem, "")
+                runIntegrationTests(ecoSystem)
             }
 
             if (params.TestDoguUpgrade != null && params.TestDoguUpgrade) {
@@ -85,7 +85,7 @@ node('vagrant') {
 
                 stage('Integration Tests - After Upgrade') {
                     // Run integration tests again to verify that the upgrade was successful
-                    runIntegrationTests(ecoSystem, "-e TAGS='not @after_plugin_deletion'")
+                    runIntegrationTests(ecoSystem)
                 }
             }
 
@@ -176,8 +176,7 @@ def runIntegrationTests(EcoSystem ecoSystem, String additionalCypressArgs) {
     ecoSystem.runCypressIntegrationTests([
             cypressImage         : "cypress/included:8.3.0",
             enableVideo          : params.EnableVideoRecording,
-            enableScreenshots    : params.EnableScreenshotRecording,
-            additionalCypressArgs: "${additionalCypressArgs}"
+            enableScreenshots    : params.EnableScreenshotRecording
     ])
 }
 
