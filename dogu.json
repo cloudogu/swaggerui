@@ -1,6 +1,6 @@
 {
   "Name": "official/swaggerui",
-  "Version": "3.25.0-2",
+  "Version": "4.9.0-1",
   "DisplayName": "Swagger UI",
   "Description": "Swagger UI displays your openAPI specification.",
   "Logo": "https://github.com/cloudogu/swagger-ui/blob/master/src/img/logo_small.png?raw=true",
@@ -14,13 +14,47 @@
   "Url": "http://swagger.io/tools/swagger-ui/",
   "Image": "registry.cloudogu.com/official/swaggerui",
   "Dependencies": [
-    "nginx"
+    {
+      "type": "dogu",
+      "name": "nginx"
+    }
   ],
   "Configuration": [
+    {
+      "Name": "logging/root",
+      "Description": "Set the root log level to one of ERROR, WARN, INFO, DEBUG.",
+      "Optional": true,
+      "Default": "WARN",
+      "Validation": {
+        "Type": "ONE_OF",
+        "Values": [
+          "WARN",
+          "DEBUG",
+          "INFO",
+          "ERROR"
+        ]
+      }
+    },
     {
       "Name": "validator_url",
       "Description": "Set the url of the swaggerui validator.",
       "Optional": true
+    },
+    {
+      "Name": "container_config/memory_limit",
+      "Description": "Limits the container's memory usage. Use a positive integer value followed by one of these units [b,k,m,g] (byte, kibibyte, mebibyte, gibibyte).",
+      "Optional": true,
+      "Validation": {
+        "Type": "BINARY_MEASUREMENT"
+      }
+    },
+    {
+      "Name": "container_config/swap_limit",
+      "Description": "Limits the container's swap memory usage. Use zero or a positive integer value followed by one of these units [b,k,m,g] (byte, kibibyte, mebibyte, gibibyte). 0 will disable swapping.",
+      "Optional": true,
+      "Validation": {
+        "Type": "BINARY_MEASUREMENT"
+      }
     }
   ],
   "HealthChecks": [

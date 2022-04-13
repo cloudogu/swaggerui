@@ -1,19 +1,25 @@
 #!groovy
-@Library(['github.com/cloudogu/dogu-build-lib@ff65ba3', 'github.com/cloudogu/zalenium-build-lib@30923630', 'github.com/cloudogu/ces-build-lib@a46de28']) _
+@Library(['github.com/cloudogu/dogu-build-lib@v1.6.0', 'github.com/cloudogu/zalenium-build-lib@v2.1.0', 'github.com/cloudogu/ces-build-lib@1.52.0']) _
 import com.cloudogu.ces.dogubuildlib.*
 import com.cloudogu.ces.cesbuildlib.*
 
 node('vagrant') {
     Git git = new Git(this)
+    doguName="swaggerui"
 
     timestamps{
         properties([
                 // Keep only the last x builds to preserve space
                 buildDiscarder(logRotator(numToKeepStr: '10')),
                 // Don't run concurrent builds for a branch, because they use the same workspace directory
-                disableConcurrentBuilds()
+                disableConcurrentBuilds(),
+                parameters([
+                        booleanParam(defaultValue: false, description: 'Test dogu upgrade from latest release or optionally from defined version below', name: 'TestDoguUpgrade'),
+                        booleanParam(defaultValue: true, description: 'Enables cypress to record video of the integration tests.', name: 'EnableVideoRecording'),
+                        booleanParam(defaultValue: true, description: 'Enables cypress to take screenshots of failing integration tests.', name: 'EnableScreenshotRecording'),
+                        string(defaultValue: '', description: 'Old Dogu version for the upgrade test (optional; e.g. 4.1.0-3)', name: 'OldDoguVersionForUpgradeTest'),
+                ])
         ])
-
         EcoSystem ecoSystem = new EcoSystem(this, "gcloud-ces-operations-internal-packer", "jenkins-gcloud-ces-operations-internal")
 
         stage('Checkout') {
@@ -24,7 +30,6 @@ node('vagrant') {
         stage('Lint') {
             lintDockerfile()
             shellCheck("./resources/startup.sh")
-            shellCheck("release.sh")
         }
 
         try {
@@ -52,34 +57,41 @@ node('vagrant') {
                 ecoSystem.verify("/dogu")
             }
 
+            stage('Wait for swagger dogu') {
+                timeout(15) {
+                    ecoSystem.waitForDogu("swaggerui")
+                }
+            }
+
             stage('Integration Tests') {
+                runIntegrationTests(ecoSystem)
+            }
 
-                String externalIP = ecoSystem.externalIP
+            if (params.TestDoguUpgrade != null && params.TestDoguUpgrade) {
+                stage('Upgrade dogu') {
+                    // Remove new dogu that has been built and tested above
+                    ecoSystem.purgeDogu(doguName)
 
-                if (fileExists('integrationTests/it-results.xml')) {
-                    sh 'rm -f integrationTests/it-results.xml'
+                    if (params.OldDoguVersionForUpgradeTest != '' && !params.OldDoguVersionForUpgradeTest.contains('v')) {
+                        println "Installing user defined version of dogu: " + params.OldDoguVersionForUpgradeTest
+                        ecoSystem.installDogu("official/" + doguName + " " + params.OldDoguVersionForUpgradeTest)
+                    } else {
+                        println "Installing latest released version of dogu..."
+                        ecoSystem.installDogu("official/" + doguName)
+                    }
+                    installTestPlugin(ecoSystem, testPluginName)
+                    ecoSystem.startDogu(doguName)
+                    ecoSystem.waitForDogu(doguName)
+                    ecoSystem.upgradeDogu(ecoSystem)
+
+                    // Wait for upgraded dogu to get healthy
+                    ecoSystem.waitForDogu(doguName)
+                    ecoSystem.waitUntilAvailable(doguName)
                 }
 
-                timeout(time: 15, unit: 'MINUTES') {
-
-                    try {
-
-                        withZalenium { zaleniumIp ->
-
-                            dir('integrationTests') {
-
-                                docker.image('node:10.19.0-stretch').inside("-e WEBDRIVER=remote -e CES_FQDN=${externalIP} -e SELENIUM_BROWSER=chrome -e SELENIUM_REMOTE_URL=http://${zaleniumIp}:4444/wd/hub") {
-                                    sh 'yarn install'
-                                    sh 'yarn run ci-test'
-                                }
-
-                            }
-
-                        }
-                    } finally {
-                        // archive test results
-                        junit allowEmptyResults: true, testResults: 'integrationTests/it-results.xml'
-                    }
+                stage('Integration Tests - After Upgrade') {
+                    // Run integration tests again to verify that the upgrade was successful
+                    runIntegrationTests(ecoSystem)
                 }
             }
 
@@ -164,6 +176,14 @@ node('vagrant') {
             }
         }
     }
+}
+
+def runIntegrationTests(EcoSystem ecoSystem) {
+    ecoSystem.runCypressIntegrationTests([
+            cypressImage         : "cypress/included:8.3.0",
+            enableVideo          : params.EnableVideoRecording,
+            enableScreenshots    : params.EnableScreenshotRecording
+    ])
 }
 
 String getChangelog(String releaseVersion){
