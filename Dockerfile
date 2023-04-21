@@ -8,7 +8,7 @@ RUN unzip /tmp/swagger-ui.zip -d /tmp
 
 FROM registry.cloudogu.com/official/base:3.15.8-1
 LABEL NAME="official/swaggerui" \
-      VERSION="4.9.0-1" \
+      VERSION="4.9.0-2" \
       maintainer="hello@cloudogu.com"
 
 ENV SERVICE_TAGS=webapp \
