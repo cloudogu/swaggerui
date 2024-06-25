@@ -1,4 +1,4 @@
-MAKEFILES_VERSION=5.0.0
+MAKEFILES_VERSION=9.0.5
 
 .DEFAULT_GOAL:=help
 
@@ -30,22 +30,23 @@ include build/make/variables.mk
 # You may want to overwrite existing variables for target actions to fit into your project.
 
 include build/make/self-update.mk
-include build/make/dependencies-gomod.mk
-include build/make/build.mk
-include build/make/test-common.mk
-include build/make/test-integration.mk
-include build/make/test-unit.mk
-include build/make/static-analysis.mk
+#include build/make/dependencies-gomod.mk
+#include build/make/build.mk
+#include build/make/test-common.mk
+#include build/make/test-integration.mk
+#include build/make/test-unit.mk
+#include build/make/static-analysis.mk
 include build/make/clean.mk
 # either package-tar.mk
-include build/make/package-tar.mk
+#include build/make/package-tar.mk
 # or package-debian.mk
-include build/make/package-debian.mk
+#include build/make/package-debian.mk
 # deploy-debian.mk depends on package-debian.mk
-include build/make/deploy-debian.mk
-include build/make/digital-signature.mk
-include build/make/yarn.mk
-include build/make/bower.mk
+#include build/make/deploy-debian.mk
+#include build/make/digital-signature.mk
+#include build/make/yarn.mk
+#include build/make/bower.mk
 # only include this in dogu repositories
 include build/make/release.mk
+include build/make/k8s-dogu.mk
 
