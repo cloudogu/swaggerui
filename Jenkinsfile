@@ -72,8 +72,14 @@ node('vagrant') {
                 }
             }
 
+
             stage('Integration Tests') {
-                runIntegrationTests(ecoSystem)
+                echo "run integration tests."
+                ecoSystem.runCypressIntegrationTests([
+                        cypressImage     : "cypress/included:13.12.0",
+                        enableVideo      : params.EnableVideoRecording,
+                        enableScreenshots: params.EnableScreenshotRecording,
+                ])
             }
 
             if (params.TestDoguUpgrade != null && params.TestDoguUpgrade) {
