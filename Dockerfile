@@ -1,4 +1,4 @@
-FROM registry.cloudogu.com/official/base:3.15.8-1 as swaggerui
+FROM registry.cloudogu.com/official/base:3.20.1-2 as swaggerui
 ENV SWAGGERUI_VERSION=4.9.0-1 \
     SWAGGERUI_ZIP_SHA256="0bfecf30a09247936eed6ec2d5d8ddba3b1a847e24017cd3876ddce5b33736ce"
 RUN apk update && apk add curl
@@ -6,9 +6,9 @@ RUN curl -Lsk --fail --silent --location --retry 3 https://github.com/cloudogu/s
 RUN echo "${SWAGGERUI_ZIP_SHA256} */tmp/swagger-ui.zip" | sha256sum -c -
 RUN unzip /tmp/swagger-ui.zip -d /tmp
 
-FROM registry.cloudogu.com/official/base:3.15.8-1
+FROM registry.cloudogu.com/official/base:3.20.1-2
 LABEL NAME="official/swaggerui" \
-      VERSION="4.9.0-2" \
+      VERSION="4.9.0-3" \
       maintainer="hello@cloudogu.com"
 
 ENV SERVICE_TAGS=webapp \

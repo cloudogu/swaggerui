@@ -1,4 +1,4 @@
-const {Then} = require("cypress-cucumber-preprocessor/steps");
+import {Then} from "@badeball/cypress-cucumber-preprocessor";
 
 Then("the page is shown without requiring authentication", function () {
     cy.url().should('contain', Cypress.config().baseUrl)
