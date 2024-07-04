@@ -4,6 +4,10 @@ Below you will find the release notes for the Swagger UI Dogu.
 
 Technical details on a release can be found in the corresponding [Changelog](https://docs.cloudogu.com/en/docs/dogus/swaggerui/CHANGELOG/).
 
+## Release 4.9.0-3
+
+We have only made technical changes. You can find more details in the changelogs.
+
 ## Release 4.9.0-2
 
 We have only made technical changes. You can find more details in the changelogs.
