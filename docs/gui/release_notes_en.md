@@ -14,6 +14,6 @@ We have only made technical changes. You can find more details in the changelogs
 
 ## Release 4.9.0-1
 
-> The release fixes critical security vulnerabilities ([CVE-2018-25032](https://security.alpinelinux.org/vuln/CVE-2018-25032), [CVE-2022-0778](https://security.alpinelinux.org/vuln/CVE-2022-0778)). An update is therefore recommended.
+**The release fixes critical security vulnerabilities ([CVE-2018-25032](https://security.alpinelinux.org/vuln/CVE-2018-25032), [CVE-2022-0778](https://security.alpinelinux.org/vuln/CVE-2022-0778)). An update is therefore recommended.**
 
 * The Dogu now offers the Swagger UI version 4.9.0. The release notes of Swagger UI can be found [here](https://github.com/swagger-api/swagger-ui/releases/tag/v4.9.0).
