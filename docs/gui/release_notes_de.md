@@ -1,11 +1,12 @@
-# Release Notes* Fix of critical CVE-2024-41110 in library dependencies. This vulnerability could not be actively exploited, though.
+# Release Notes
 
 Im Folgenden finden Sie die Release Notes für das Swagger UI-Dogu. 
 
 Technische Details zu einem Release finden Sie im zugehörigen [Changelog](https://docs.cloudogu.com/de/docs/dogus/swaggerui/CHANGELOG/).
 
 ## Release 4.9.0-4
-* Behebung von kritischem CVE-2024-41110 in Bibliotheksabhängigkeiten. Diese Schwachstelle konnte jedoch nicht aktiv ausgenutzt werden.
+
+* Behebung eines kritischen CVEs CVE-2024-41110 in Bibliotheksabhängigkeiten. Diese Schwachstelle konnte jedoch nicht aktiv in Swagger UI ausgenutzt werden.
 
 ## Release 4.9.0-3
 
