@@ -4,6 +4,9 @@ Below you will find the release notes for the Swagger UI Dogu.
 
 Technical details on a release can be found in the corresponding [Changelog](https://docs.cloudogu.com/en/docs/dogus/swaggerui/CHANGELOG/).
 
+## Release 4.9.0-5
+- Relicense own code to AGPL-3-only
+
 ## Release 4.9.0-4
 
 * Fix of critical CVE CVE-2024-41110 in library dependencies. This vulnerability could not be actively exploited in Swagger UI, though.
