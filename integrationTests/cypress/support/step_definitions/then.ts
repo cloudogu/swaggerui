@@ -6,6 +6,6 @@ Then("the page is shown without requiring authentication", function () {
 });
 
 Then("the warp menu exists", function () {
-    cy.get('#warp-menu-warpbtn').should('exist')
+    cy.get("#warp-menu-shadow-host").shadow().find("#warp-toggle").should("exist");
 });
 
