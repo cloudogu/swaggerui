@@ -4,6 +4,11 @@ Im Folgenden finden Sie die Release Notes für das Swagger UI-Dogu.
 
 Technische Details zu einem Release finden Sie im zugehörigen [Changelog](https://docs.cloudogu.com/de/docs/dogus/swaggerui/CHANGELOG/).
 
+## Release 5.17.14-1
+- Das Dogu bietet nun die Swagger UI-Version 5.17.14 an.
+- Das [Major-Update](https://github.com/swagger-api/swagger-ui/releases/tag/v5.0.0) ermöglicht die Verwendung von [OpenAPI 3.1.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.1.0.md) Anwendungen
+- Eine ausführliche Auflistung aller Änderungen finden Sie im [Changelog von swagger-ui](https://github.com/swagger-api/swagger-ui/releases?page=1) 
+
 ## Release 4.9.0-5
 - Die Cloudogu-eigenen Quellen werden von der MIT-Lizenz auf die AGPL-3.0-only relizensiert.
 
