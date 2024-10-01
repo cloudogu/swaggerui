@@ -30,7 +30,6 @@ RUN set -x -o errexit -o nounset -o pipefail \
   && rm -rf /var/cache/apk/* \
   && mkdir -p ${NGINX_HOME}
 
-# install swaggerui from fork https://github.com/cloudogu/swagger-ui/releases/ \
 COPY --from=swaggerui /tmp/dist/* ${NGINX_HOME}/
 
 # copy files

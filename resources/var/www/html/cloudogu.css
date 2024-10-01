@@ -1,0 +1,207 @@
+/* empty for now - possible overwrite elements for CI purpose */
+@font-face {
+    font-family: 'Droid-Sans'; /* Name your font family */
+    src: url('./Droid-Sans.woff2'); /* Locate the .ttf file within your directory*/
+}
+
+:root {
+    --cloudogu-blue: #23a3dd;
+    --cloudogu-blue-darken-15: #18729b; /* scss darken 15% */
+    --cloudogu-darker-blue: #00426B;
+    --cloudogu-dark-blue: #0a4d6c;
+    --cloudogu-medium-blue: #1b7daa;
+    --cloudogu-gray: #878787;
+    --cloudogu-green: #b8cd08;
+    --cloudogu-yellow: #fec900;
+    --cloudogu-red: #e43b53;
+    --cloudogu-red-lighten-35: #fad8dd;
+}
+
+body * {
+    font-family: 'Droid-Sans', sans-serif !important; /* Use the font family */
+}
+
+.topbar {
+    background-color: var(--cloudogu-darker-blue) !important;
+}
+
+/* color-info */
+.scopes h2 a {
+    color: var(--cloudogu-blue) !important;
+}
+.btn.execute {
+    background-color: var(--cloudogu-blue) !important;
+    border-color: var(--cloudogu-blue) !important;
+}
+.info a {
+    color: var(--cloudogu-blue) !important;
+}
+.info a:hover {
+    color: var(--cloudogu-blue-darken-15) !important;
+}
+
+/*  */
+.topbar .download-url-wrapper input[type=text],
+.topbar .download-url-wrapper select-label span {
+    border-color: var(--cloudogu-medium-blue) !important;
+}
+
+.topbar .download-url-wrapper .download-url-button {
+    background: var(--cloudogu-medium-blue) !important;
+}
+
+/* color-get */
+.opblock.opblock-get {
+    border-color: var(--cloudogu-blue) !important;
+    background: rgba(var(--cloudogu-blue), .1) !important;
+}
+.opblock.opblock-get .opblock-summary-method {
+    background: var(--cloudogu-blue) !important;
+}
+.opblock.opblock-get .opblock-summary {
+    border-color: var(--cloudogu-blue) !important;
+}
+.opblock.opblock-get .tab-header .tab-item.active h4 span:after {
+    background: var(--cloudogu-blue) !important;
+}
+
+/* color-post */
+.opblock.opblock-post {
+    border-color: var(--cloudogu-green) !important;
+    background: rgba(var(--cloudogu-green), .1) !important;
+}
+.opblock.opblock-post .opblock-summary-method {
+    background: var(--cloudogu-green) !important;
+}
+.opblock.opblock-post .opblock-summary {
+    border-color: var(--cloudogu-green) !important;
+}
+.opblock.opblock-post .tab-header .tab-item.active h4 span:after {
+    background: var(--cloudogu-green) !important;
+}
+.btn.authorize {
+    color: var(--cloudogu-green) !important;
+    border-color: var(--cloudogu-green) !important;
+}
+.btn.authorize svg{
+    fill: var(--cloudogu-green) !important;
+}
+
+/* _color-delete */
+.opblock.opblock-delete {
+    border-color: var(--cloudogu-red) !important;
+    background: rgba(var(--cloudogu-red), .1) !important;
+}
+.opblock.opblock-delete .opblock-summary-method {
+    background: var(--cloudogu-red) !important;
+}
+.opblock.opblock-delete .opblock-summary {
+    border-color: var(--cloudogu-red) !important;
+}
+.opblock.opblock-delete .tab-header .tab-item.active h4 span:after {
+    background: var(--cloudogu-red) !important;
+}
+
+button.invalid,
+select.invalid,
+input[type=text],
+input[type=password],
+input[type=search],
+input[type=email],
+input[type=file],
+textarea {
+    border-color: var(--cloudogu-red) !important;
+    background: var(--cloudogu-red-lighten-35) !important;
+}
+.model-deprecated-warning {
+    color: var(--cloudogu-red) !important;
+}
+.errors-wrapper {
+    border-color: var(--cloudogu-red) !important;
+    background: rgba(var(--cloudogu-red), .1);
+}
+
+/* text color */
+.swagger-ui,
+.info p, .info li, .info table,
+.info h1, .info h2, .info h3, .info h4, .info h5,
+.info .title,
+.opblock-tag small,
+.opblock .opblock-summary-description,
+.opblock-description-wrapper,
+.opblock-external-docs-wrapper,
+.opblock-title_normal,
+.opblock-description-wrapper h4,
+.opblock-external-docs-wrapper h4,
+.opblock-title_normal h4,
+.opblock-description-wrapper p,
+.opblock-external-docs-wrapper p,
+.opblock-title_normal p,
+.responses-inner h4, .responses-inner h5,
+.response-col_status,
+.response-col_links,
+.dialog-ux .modal-ux-content p,
+table thead tr th, table thead tr td,
+.json-schema-2020-12-keyword--name--primary,
+.json-schema-2020-12-keyword--value--primary,
+.json-schema-2020-12__attribute,
+.json-schema-2020-12-property .json-schema-2020-12__title,
+.auth-container .errors,
+textarea,
+.checkbox p,
+.info .base-url,
+.parameter__type,
+.opblock .opblock-summary-path,
+.opblock .opblock-summary-operation-id,
+.opblock .opblock-summary-path__deprecated,
+.model,
+table.headers td,
+.scopes h2,
+.btn,
+.errors-wrapper hgroup h4,
+select,
+label,
+.opblock-tag,
+.opblock .opblock-section-header > label,
+.opblock .opblock-section-header h4,
+.tab li,
+.scheme-container .schemes > .schemes-server-container > label,
+.loading-container .loading:after,
+section h3,
+.dialog-ux .modal-ux-content h4,
+.dialog-ux .modal-ux-header h3,
+.servers > label,
+.parameter__name
+{
+    color: var(--cloudogu-gray) !important;
+}
+
+/* code font family */
+.errors-wrapper .errors h4,
+.json-schema-2020-12__constraint,
+.json-schema-2020-12-property .json-schema-2020-12__title,
+.json-schema-2020-12-keyword__value--const,
+.auth-container .errors,
+textarea,
+textarea.curl,
+.checkbox p,
+.info .base-url,
+.parameter__type,
+.opblock .opblock-summary-path,
+.opblock .opblock-summary-operation-id,
+.opblock .opblock-summary-path__deprecated,
+.response-col_status .response-undocumented,
+.response-col_links .response-undocumented,
+.opblock-body pre.microlight,
+code,
+.model,
+table.headers td,
+.parameter__extension,
+.parameter__deprecated,
+.response__extension
+{
+    font-family: Consolas, "Liberation Mono", Courier, monospace !important;
+}
+
+
+
