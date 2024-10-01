@@ -17,7 +17,7 @@
     --cloudogu-red-lighten-35: #fad8dd;
 }
 
-body * {
+.swagger-ui {
     font-family: 'Droid-Sans', sans-serif !important; /* Use the font family */
 }
 
@@ -104,12 +104,12 @@ body * {
 
 button.invalid,
 select.invalid,
-input[type=text],
-input[type=password],
-input[type=search],
-input[type=email],
-input[type=file],
-textarea {
+input[type=text].invalid,
+input[type=password].invalid,
+input[type=search].invalid,
+input[type=email].invalid,
+input[type=file].invalid,
+textarea.invalid {
     border-color: var(--cloudogu-red) !important;
     background: var(--cloudogu-red-lighten-35) !important;
 }
