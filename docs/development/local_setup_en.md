@@ -26,11 +26,12 @@ sha256sum swagger-ui-4.9.0-1.zip > swagger-ui-4.9.0-1.zip.sha256
 
 ### Setup since 5.17.14-1
 Releases can be found on the official swagger-ui download page.
+
+Only the current version of swagger-ui needs to be adapted in the Dockerfile.
 The fork will be dismissed.
 ```
-1. download artefact from swagger-ui
-2. generate the checksum 
-sha256sum swagger-ui.zip
+1. download artefact from "swagger-ui"
+2. generate the checksum "sha256sum swagger-ui.zip"
 3. Edit Dockerfile for new version
 ```
 
