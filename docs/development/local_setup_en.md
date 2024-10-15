@@ -34,4 +34,3 @@ The fork will be dismissed.
 2. generate the checksum "sha256sum swagger-ui.zip"
 3. Edit Dockerfile for new version
 ```
-
