@@ -6,15 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [v5.17.14-1] - 2024-10-18
 - dismiss special fork from swagger-ui (#31)
 - Update swagger-ui to 5.17.14 (#31)
 
 ### Changed
-- Relicense to AGPL-3.0-only
+- Update base image to alpine 3.20.3 (#31)
 
 ## [v4.9.0-5] - 2024-09-18
 ### Changed
-- Relicense to AGPL-3.0-only
+- Relicense to AGPL-3.0-only (#29)
 
 ## [v4.9.0-4] - 2024-08-07
 ### Changed
