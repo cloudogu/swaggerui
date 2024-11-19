@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v5.18.2-1] - 2024-11-19
+- Update cypress/included:13.15.2
+- Update github.com/cloudogu/ces-build-lib@3.0.0
+- Update base image to version 3.20.3-3
+- Update swagger-ui to 5.18.2 
 
 ## [v5.17.14-1] - 2024-10-18
 - dismiss special fork from swagger-ui (#31)
