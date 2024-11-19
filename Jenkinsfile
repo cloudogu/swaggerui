@@ -77,7 +77,7 @@ node('vagrant') {
             stage('Integration Tests') {
                 echo "run integration tests."
                 ecoSystem.runCypressIntegrationTests([
-                        cypressImage     : "cypress/included:13.14.0",
+                        cypressImage     : "cypress/included:13.15.2",
                         enableVideo      : params.EnableVideoRecording,
                         enableScreenshots: params.EnableScreenshotRecording,
                 ])
@@ -196,7 +196,7 @@ node('vagrant') {
 
 def runIntegrationTests(EcoSystem ecoSystem) {
     ecoSystem.runCypressIntegrationTests([
-            cypressImage         : "cypress/included:8.3.0",
+            cypressImage         : "cypress/included:13.14.0",
             enableVideo          : params.EnableVideoRecording,
             enableScreenshots    : params.EnableScreenshotRecording
     ])
