@@ -3,9 +3,20 @@
     "@badeball/cypress-cucumber-preprocessor": "^19.2.0",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.1",
     "@cloudogu/dogu-integration-test-library": "6.1.1",
-    "cypress": "13.12.0",
+    "cypress": "13.15.2",
     "esbuild": "^0.21.5",
+    "seedrandom": "^3.0.5", 
     "typescript": "^5.5.2"
+  },
+  "resolutions": {
+    "@cypress/request": "^3.0.0",
+    "qs": "6.13.0",
+    "braces": "3.0.3",
+    "cross-spawn": "7.0.5",
+    "minimatch": "^9.0.4",
+    "semver": "^7.5.3",
+    "glob": "^9.3.2",
+    "reflect-metadata": "^0.2.2"
   },
   "scripts": {
     "updateTests": "mkdir -p cypress/e2e/dogu_integration_test_lib && cp -r node_modules/@cloudogu/dogu-integration-test-library/lib/integration/* cypress/e2e/dogu_integration_test_lib",
