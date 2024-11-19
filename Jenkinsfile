@@ -1,5 +1,5 @@
 #!groovy
-@Library(['github.com/cloudogu/dogu-build-lib@v2.5.0', 'github.com/cloudogu/ces-build-lib@2.4.0']) _
+@Library(['github.com/cloudogu/dogu-build-lib@v2.5.0', 'github.com/cloudogu/ces-build-lib@3.0.0']) _
 import com.cloudogu.ces.dogubuildlib.*
 import com.cloudogu.ces.cesbuildlib.*
 
@@ -57,6 +57,7 @@ node('vagrant') {
             }
 
             stage('Trivy scan') {
+                sh 'mkdir -p trivy/output'
                 trivy.scanDogu("/dogu", TrivyScanFormat.HTML, params.TrivyScanLevels, params.TrivyStrategy)
                 trivy.scanDogu("/dogu", TrivyScanFormat.JSON, params.TrivyScanLevels, params.TrivyStrategy)
                 trivy.scanDogu("/dogu", TrivyScanFormat.PLAIN, params.TrivyScanLevels, params.TrivyStrategy)
@@ -76,7 +77,7 @@ node('vagrant') {
             stage('Integration Tests') {
                 echo "run integration tests."
                 ecoSystem.runCypressIntegrationTests([
-                        cypressImage     : "cypress/included:13.12.0",
+                        cypressImage     : "cypress/included:13.14.0",
                         enableVideo      : params.EnableVideoRecording,
                         enableScreenshots: params.EnableScreenshotRecording,
                 ])
