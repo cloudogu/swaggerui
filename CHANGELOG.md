@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- [#33] Update Makefiles to 9.5.0
+
 ## [v5.18.2-1] - 2024-11-19
 - Update cypress/included:13.15.2
 - Update github.com/cloudogu/ces-build-lib@3.0.0
