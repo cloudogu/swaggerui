@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- [#33] Update Makefiles to 9.5.0
+- [#33] Update Makefiles to 9.5.2
+- [#35] Update base image to 3.21.0-1
 
 ## [v5.18.2-1] - 2024-11-19
 - Update cypress/included:13.15.2
