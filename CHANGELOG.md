@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - [#33] Update Makefiles to 9.5.2
 - [#35] Update base image to 3.21.0-1
+- [#37] use new Trivy-Class from ces-build-lib instead of dogu-build-lib
 
 ## [v5.18.2-1] - 2024-11-19
 - Update cypress/included:13.15.2
