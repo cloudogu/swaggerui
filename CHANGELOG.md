@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v5.18.2-3] - 2025-01-22
+### Fixed
+- Add Pre-Release Build-Stage
+
 ## [v5.18.2-2] - 2025-01-22
 ### Changed
 - [#33] Update Makefiles to 9.5.2
