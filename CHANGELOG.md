@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v5.18.2-4] - 2025-02-12
+### Added
+- Add missing container config keys to dogu.json
+
 ## [v5.18.2-3] - 2025-01-22
 ### Fixed
 - Add Pre-Release Build-Stage
