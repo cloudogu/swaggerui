@@ -7,6 +7,8 @@ Technische Details zu einem Release finden Sie im zugehörigen [Changelog](https
 
 ## [v5.18.2-4] - 2025-02-12
 
+Wir haben nur technische Änderungen vorgenommen. Näheres finden Sie in den Changelogs.
+
 ## [v5.18.2-3] - 2025-01-22
 
 Wir haben nur technische Änderungen vorgenommen. Näheres finden Sie in den Changelogs.
