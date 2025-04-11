@@ -5,6 +5,9 @@ Im Folgenden finden Sie die Release Notes für das Swagger UI-Dogu.
 Technische Details zu einem Release finden Sie im zugehörigen [Changelog](https://docs.cloudogu.com/de/docs/dogus/swaggerui/CHANGELOG/).
 ## [Unreleased]
 
+## [v5.20.8-1] - 2025-04-11
+- Das Dogu bietet nun die Swagger UI-Version 5.20.8 an.
+
 ## [v5.19.0-1] - 2025-02-26
 
 - Das Dogu bietet nun die Swagger UI-Version 5.19.0 an.

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v5.20.8-1] - 2025-04-11
+### Changed
+- [#46] Update Makefiles to 9.9.1
+- [#46] Update swagger-ui to 5.20.8
+- [#46] Update dogu-build-lib to 3.2.0 and ces-build-lib to 4.2.0
+
 ## [v5.19.0-1] - 2025-02-26
 ### Changed
 - [#44] Update Makefiles to 9.5.3
