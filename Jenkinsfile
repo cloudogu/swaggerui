@@ -42,7 +42,7 @@ node('vagrant') {
                 if (gitflow.isPreReleaseBranch()) {
                     sh "make prerelease_namespace"
                 }
-                ecoSystem.provision("/dogu")
+                ecoSystem.provision(mountPath: "/dogu", timeoutInMinutes: 15)
             }
 
             stage('Setup') {
