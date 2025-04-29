@@ -5,6 +5,8 @@ Below you will find the release notes for the Swagger UI Dogu.
 Technical details on a release can be found in the corresponding [Changelog](https://docs.cloudogu.com/en/docs/dogus/swaggerui/CHANGELOG/).
 ## [Unreleased]
 
+## [v5.21.0-2] - 2025-04-29
+
 ### Changed
 - Usage of memory and CPU was optimized for the Kubernetes Multinode environment.
 
