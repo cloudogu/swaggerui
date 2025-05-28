@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v5.22.0-1] - 2025-05-28
+### Changed
+- [#52] Update swagger-ui to 5.22.0
+
 ## [v5.21.0-2] - 2025-04-29
 - [#50] Set sensible resource requests and limits
 
