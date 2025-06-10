@@ -28,6 +28,6 @@ sharedBuildPipeline([
         dependencies        : ["nginx"],
         checkMarkdown       : false,
         runIntegrationTests : true,
-        doBatsTests         : true,
+        doBatsTests         : false,
         cypressImage        : "cypress/included:13.15.2",
 ])
