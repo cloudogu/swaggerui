@@ -1,6 +1,6 @@
 FROM registry.cloudogu.com/official/base:3.21.0-1 AS swaggerui
-ENV SWAGGERUI_VERSION=5.22.0 \
-    SWAGGERUI_ZIP_SHA256="1fe917c40ffaacacd8035f6fed9971d876c883f0c689c0f914322cd27a151929"
+ENV SWAGGERUI_VERSION=5.24.1 \
+    SWAGGERUI_ZIP_SHA256="72fc557534e19d014cb0aadc51601d15b60df5a578cc477b107139a80be26e59"
 RUN apk update && apk add curl
 RUN curl -Lsk --fail --silent --location --retry 3 https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${SWAGGERUI_VERSION}.zip -o /tmp/swagger-ui.zip
 RUN echo "${SWAGGERUI_ZIP_SHA256} */tmp/swagger-ui.zip" | sha256sum -c -
@@ -8,7 +8,7 @@ RUN unzip /tmp/swagger-ui.zip -d /tmp && mv /tmp/swagger-ui-${SWAGGERUI_VERSION}
 
 FROM registry.cloudogu.com/official/base:3.21.0-1
 LABEL NAME="official/swaggerui" \
-      VERSION="5.22.0-1" \
+      VERSION="5.24.1-0" \
       maintainer="hello@cloudogu.com"
 
 ENV SERVICE_TAGS=webapp \
