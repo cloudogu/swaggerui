@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v5.25.2-1] - 2025-06-18
+### Changed
+- [#56] Update swagger-ui to 5.25.2
+- [#56] Update cypress to 13.17.0
+- [#56] Update Base Image to v3.22.0-2
+ 
 ## [v5.24.1-1] - 2025-06-16
 ### Changed
 - [#54] Update swagger-ui to 5.24.1
