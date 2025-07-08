@@ -6,6 +6,10 @@ Technical details on a release can be found in the corresponding [Changelog](htt
 
 ## [Unreleased]
 
+## [v5.26.2-1] - 2025-07-08
+### Changed
+- [#60] The Dogu now offers the Swagger UI version 5.26.2.
+
 ## [v5.26.0-1] - 2025-07-03
 ### Changed
 - [#58] The Dogu now offers the Swagger UI version 5.26.0.
