@@ -4,7 +4,7 @@ ENV SWAGGERUI_VERSION=5.26.2 \
 RUN apk add --no-cache curl
 RUN curl -Lsk --fail --silent --location --retry 3 https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${SWAGGERUI_VERSION}.zip -o /tmp/swagger-ui.zip
 RUN echo "${SWAGGERUI_ZIP_SHA256} */tmp/swagger-ui.zip" | sha256sum -c -
-RUN unzip /tmp/swagger-ui.zip -d /tmp && mv /tmp/swagger-ui-${SWAGGERUI_VERSION}/dist /tmp/dist
+RUN unzip /tmp/swagger-ui.zip -d /tmp && mv /tmp/swagger-ui-${SWAGGERUI_VERSION}/dist /tmp/dist && rm -f /tmp/swagger-ui.zip
 
 FROM registry.cloudogu.com/official/base:3.22.0-3
 LABEL NAME="official/swaggerui" \
