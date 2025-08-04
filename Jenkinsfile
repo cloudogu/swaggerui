@@ -9,6 +9,7 @@ def pipe = new com.cloudogu.sos.pipebuildlib.DoguPipe(this, [
     doguName           : "swaggerui",
     updateSubmodules    : true,
     shellScripts        : "./resources/startup.sh",
+    checkMarkdown       : true,
     dependencies        : ["nginx"],
     runIntegrationTests : true,
 ])
