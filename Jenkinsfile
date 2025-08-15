@@ -12,6 +12,8 @@ def testImage
 def initialCesPassword
 def gcloudCommand
 
+def doguName="swaggerui"
+
 def createMNParameter(List dogusToAdd = [], List componentsToAdd = []) {
     def inputFile = 'integrationTests/mn_params.yaml'
     def outputFile = 'integrationTests/mn_params_modified.yaml'
@@ -83,7 +85,7 @@ timestamps{
                 script {
                     Git git = new Git(this)
                     GitFlow gitflow = new GitFlow(this, git)
-                    doguName="swaggerui"
+
 
                     EcoSystem ecoSystem = new EcoSystem(this, "gcloud-ces-operations-internal-packer", "jenkins-gcloud-ces-operations-internal")
 
@@ -371,7 +373,7 @@ timestamps{
                             while(true) {
                                 def setupStatus = "init"
                                 try {
-                                    setupStatus = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get dogus --namespace=ecosystem -o jsonpath='{.status.health}'\"")
+                                    setupStatus = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get dogus --namespace=ecosystem $doguName -o jsonpath='{.status.health}'\"")
                                     if (setupStatus == "available") {
                                         break
                                     }
