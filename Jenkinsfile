@@ -476,7 +476,7 @@ class MultinoteEcoSystem extends EcoSystem {
         script.sh "make install-yq"
 
         // setup coder
-        script.withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+        script.withCredentials([script.string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
             script.sh "curl -L https://coder.com/install.sh | sh"
             script.sh "coder login https://coder.cloudogu.com --token $token"
         }
@@ -484,7 +484,7 @@ class MultinoteEcoSystem extends EcoSystem {
         createMNParameter(config.dependencies, [])
 
         if (config.clustername.isEmpty()) {
-            script.withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+            script.withCredentials([script.string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
                 script.sh """
                    coder create  \
                        --template $MN_CODER_TEMPLATE \
