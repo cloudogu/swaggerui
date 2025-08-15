@@ -510,9 +510,9 @@ class MultinoteEcoSystem extends EcoSystem {
                     // this is okay
                 }
                 if (setupStatus.contains("Failed")) {
-                    error("Failed to set up mn workspace. K8s-ces-setup failed")
+                    script.error("Failed to set up mn workspace. K8s-ces-setup failed")
                 }
-                sleep(time: 10, unit: 'SECONDS')
+                script.sleep(time: 10, unit: 'SECONDS')
                 counter++
             }
             coder_workspace = script.sh(returnStdout: true, script: "coder ssh $coder_workspace \"curl -H 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/attributes/cluster-name\"")
