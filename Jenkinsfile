@@ -525,7 +525,7 @@ class MultinoteEcoSystem extends EcoSystem {
     }
 
     public String getExternalIP() {
-        return _externalIp
+        return external_ip
     }
 
     void build(String doguPath) {
