@@ -334,6 +334,13 @@ timestamps{
                             initialCesPassword = getInitialCESPassword(MN_CODER_WORKSPACE)
                         }
                     } // Stage Get Ces-Password
+                    stage ("Authenticate to GCloud") {
+                        script {
+                            withCredentials([file(credentialsId: 'jenkins_workspace_gcloud_key', variable: 'SERVICE_ACCOUNT_JSON')]) {
+                                sh "gcloud auth activate-service-account --key-file=$SERVICE_ACCOUNT_JSON"
+                            }
+                        }
+                    }
                     stage ("Install Dogu to MN") {
                         script {
                             gcloudCommand = getGCloudCommand(MN_CODER_WORKSPACE)
