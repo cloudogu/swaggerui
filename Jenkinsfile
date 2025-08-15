@@ -83,6 +83,7 @@ node('vagrant') {
 
         try {
             parallel (
+                /*
                 'Setup CES-Classic' : {
                     script {
                         stage('Checkout') {
@@ -174,6 +175,7 @@ node('vagrant') {
                         }
                     } // script
                 }, // Parallel Setup CES-Classic
+                */
                 'Setup MN-Cluster' : {
                     node('docker') {
                         stage('Checkout') {
