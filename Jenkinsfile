@@ -402,7 +402,7 @@ timestamps{
                     }
                     stage("Run Integration Tests") {
                         MultinoteEcoSystem ecoSystem = new MultinoteEcoSystem(this, externalClusterIp)
-                        Cypress cypress = new Cypress(this.script, [
+                        Cypress cypress = new Cypress(this, [
                            cypressImage         : "cypress/included:13.15.2",
                            enableVideo          : params.EnableVideoRecording,
                            enableScreenshots    : params.EnableScreenshotRecording
@@ -543,7 +543,7 @@ class MultinoteEcoSystem extends EcoSystem {
     }
 
     public String getExternalIP() {
-    return _externalIp
+        return _externalIp
     }
 
 }
