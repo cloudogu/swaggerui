@@ -412,7 +412,7 @@ timestamps{
 
                             // Sed-Befehl für Linux/macOS
                             sh """
-                            sed -i 's|baseUrl: .*|baseUrl: "${newUrl}",|' integrationTests/cypress.config.js
+                            sed -i 's|baseUrl: .*|baseUrl: "${newUrl}",|' ./integrationTests/cypress.config.js
                             """
                             cypress.preTestWork()
                             cypress.runIntegrationTests(ecoSystem)
