@@ -98,9 +98,6 @@ timestamps{
                         }
                         stage('Provision') {
                             // change namespace to prerelease_namespace if in develop-branch
-                            if (gitflow.isPreReleaseBranch()) {
-                                sh "make prerelease_namespace"
-                            }
                             ecoSystem.provision("/dogu")
                         }
                         stage('Setup') {
@@ -270,12 +267,6 @@ timestamps{
                     stage('Checkout') {
                         checkout scm
                         sh 'git submodule update --init'
-                    }
-                    stage('Provision') {
-                        // change namespace to prerelease_namespace if in develop-branch
-                        if (gitflow.isPreReleaseBranch()) {
-                            sh "make prerelease_namespace"
-                        }
                     }
                     stage('Setup coder') {
                         script {
