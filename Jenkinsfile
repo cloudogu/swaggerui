@@ -81,6 +81,11 @@ node('vagrant') {
         ])
         EcoSystem ecoSystem = new EcoSystem(this, "gcloud-ces-operations-internal-packer", "jenkins-gcloud-ces-operations-internal")
 
+        stage('Checkout') {
+            checkout scm
+            sh 'git submodule update --init'
+        }
+
         try {
             parallel (
                 /*
@@ -179,10 +184,6 @@ node('vagrant') {
                 'Setup MN-Cluster' : {
                     node('docker') {
                         script {
-                            stage('Checkout') {
-                                checkout scm
-                                sh 'git submodule update --init'
-                            }
                             stage('Provision') {
                                 // change namespace to prerelease_namespace if in develop-branch
                                 if (gitflow.isPreReleaseBranch()) {
