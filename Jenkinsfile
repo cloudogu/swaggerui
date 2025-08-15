@@ -351,7 +351,7 @@ timestamps{
                             sh gcloudCommand
                             env.NAMESPACE="ecosystem"
                             env.RUNTIME_ENV="remote"
-                            sh "make build"  // target from k8s-dogu.mk
+                            sh "make compile-generic"  // target from k8s-dogu.mk
                         }
                     }
                 } // script
