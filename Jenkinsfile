@@ -280,6 +280,7 @@ timestamps{
                     }
                     stage('Setup YQ') {
                         script {
+                            env.RUNTIME_ENV="remote"
                             sh "make install-yq"
                         }
                     } // Stage Setup YQ
