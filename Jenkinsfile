@@ -58,11 +58,6 @@ def getGCloudCommand(workspace) {
     }
 }
 
-Git git = new Git(this)
-GitFlow gitflow = new GitFlow(this, git)
-doguName="swaggerui"
-
-EcoSystem ecoSystem = new EcoSystem(this, "gcloud-ces-operations-internal-packer", "jenkins-gcloud-ces-operations-internal")
 
 timestamps{
     properties([
@@ -85,6 +80,12 @@ timestamps{
         'Setup CES-Classic' : {
             node('vagrant') {
                 script {
+                    Git git = new Git(this)
+                    GitFlow gitflow = new GitFlow(this, git)
+                    doguName="swaggerui"
+
+                    EcoSystem ecoSystem = new EcoSystem(this, "gcloud-ces-operations-internal-packer", "jenkins-gcloud-ces-operations-internal")
+
                     try {
                         stage('Checkout') {
                             checkout scm
@@ -264,6 +265,12 @@ timestamps{
         'Setup MN-Cluster' : {
             node('docker') {
                 script {
+                    Git git = new Git(this)
+                    GitFlow gitflow = new GitFlow(this, git)
+                    stage('Checkout') {
+                        checkout scm
+                        sh 'git submodule update --init'
+                    }
                     stage('Provision') {
                         // change namespace to prerelease_namespace if in develop-branch
                         if (gitflow.isPreReleaseBranch()) {
