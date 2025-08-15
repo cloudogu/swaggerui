@@ -462,19 +462,6 @@ class MultinoteEcoSystem extends EcoSystem {
     }
 
     void provision(String mountPath, machineType = "n1-standard-4", int timeoutInMinutes = 5) {
-        script.dir('ecosystem') {
-            script.git branch: 'develop', url: 'https://github.com/cloudogu/ecosystem', changelog: false, poll: false
-        }
-        script.timeout(time: timeoutInMinutes, unit: 'MINUTES') {
-            vagrant = createVagrant(mountPath, machineType)
-            this.mountPath = mountPath
-
-            vagrant.up()
-            externalIP = vagrant.externalIP
-        }
-    }
-
-    void provision(String mountPath, machineType = "n1-standard-4", int timeoutInMinutes = 5) {
         // isEmpty
         return
     }
