@@ -70,7 +70,7 @@ node('vagrant') {
                 // Don't run concurrent builds for a branch, because they use the same workspace directory
                 disableConcurrentBuilds(),
                 parameters([
-                        string(name: 'ClusterName', defaultValue: '', description: 'Optional: Name of the importing cluster. A new instance gets created if this parameter is not supplied'),
+                        string(name: 'ClusterName', defaultValue: 'test-am-mn-c9506277-791', description: 'Optional: Name of the importing cluster. A new instance gets created if this parameter is not supplied'),
                         booleanParam(defaultValue: false, description: 'Test dogu upgrade from latest release or optionally from defined version below', name: 'TestDoguUpgrade'),
                         booleanParam(defaultValue: true, description: 'Enables cypress to record video of the integration tests.', name: 'EnableVideoRecording'),
                         booleanParam(defaultValue: true, description: 'Enables cypress to take screenshots of failing integration tests.', name: 'EnableScreenshotRecording'),
@@ -91,18 +91,17 @@ node('vagrant') {
             shellCheck("./resources/startup.sh")
         }
 
-        stage('Provision') {
-            // change namespace to prerelease_namespace if in develop-branch
-            if (gitflow.isPreReleaseBranch()) {
-                sh "make prerelease_namespace"
-            }
-            ecoSystem.provision("/dogu")
-        }
-
         try {
             parallel (
                 'Setup CES-Classic' : {
                     script {
+                        stage('Provision') {
+                            // change namespace to prerelease_namespace if in develop-branch
+                            if (gitflow.isPreReleaseBranch()) {
+                                sh "make prerelease_namespace"
+                            }
+                            ecoSystem.provision("/dogu")
+                        }
                         stage('Setup') {
                             ecoSystem.loginBackend('cesmarvin-setup')
                             ecoSystem.setup()
@@ -178,6 +177,12 @@ node('vagrant') {
                 }, // Parallel Setup CES-Classic
                 'Setup MN-Cluster' : {
                     node('docker') {
+                        stage('Provision') {
+                            // change namespace to prerelease_namespace if in develop-branch
+                            if (gitflow.isPreReleaseBranch()) {
+                                sh "make prerelease_namespace"
+                            }
+                        }
                         stage('Setup coder') {
                             script {
                                 withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
