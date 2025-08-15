@@ -342,7 +342,11 @@ timestamps{
                         }
                     }
                     stage ("Install Dogu to MN") {
-                        script {
+                        withCredentials([[$class          : 'UsernamePasswordMultiBinding',
+                                                      credentialsId   : "harborrobotprerelease",
+                                                      usernameVariable: 'TOKEN_ID',
+                                                      passwordVariable: 'TOKEN_SECRET']]) {
+                            sh "docker login -u ${escapeToken(env.TOKEN_ID)} -p ${escapeToken(env.TOKEN_SECRET)} registry.cloudogu.com"
                             gcloudCommand = getGCloudCommand(MN_CODER_WORKSPACE)
                             sh gcloudCommand
                             env.NAMESPACE="ecosystem"
