@@ -468,7 +468,6 @@ class MultinoteEcoSystem extends EcoSystem {
     void setup(config = [:]) {
         // Merge default config with the one passed as parameter
         currentConfig = defaultSetupConfig << config
-        super.writeSetupStagingJSON(currentConfig)
 
         // setup go
         sh "sudo apt update && sudo apt install -y golang"
