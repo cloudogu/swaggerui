@@ -344,7 +344,9 @@ timestamps{
                         script {
                             withCredentials([file(credentialsId: 'jenkins_workspace_gcloud_key', variable: 'SERVICE_ACCOUNT_JSON')]) {
                                 sh "gcloud auth activate-service-account --key-file=$SERVICE_ACCOUNT_JSON"
-                                sh "gcloud components install kubectl"
+                                sh "curl -LO \"https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\""
+                                sh "chmod +x kubectl"
+                                sh "sudo mv kubectl /usr/local/bin/"
                             }
                         }
                     }
