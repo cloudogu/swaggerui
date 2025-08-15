@@ -270,6 +270,11 @@ timestamps{
                         checkout scm
                         sh 'git submodule update --init'
                     }
+                    stage('Setup Go') {
+                        script {
+                           sh "sudo apt update && sudo apt install -y golang"
+                        }
+                    }
                     stage('Setup coder') {
                         script {
                             withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
