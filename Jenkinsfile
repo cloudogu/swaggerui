@@ -347,6 +347,9 @@ timestamps{
                                 sh "curl -LO \"https://dl.k8s.io/release/\$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\""
                                 sh "chmod +x kubectl"
                                 sh "sudo mv kubectl /usr/local/bin/"
+                                sh "echo \"deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main\" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list"
+                                sh "curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -"
+                                sh "sudo apt update"
                                 sh "sudo apt install google-cloud-sdk-gke-gcloud-auth-plugin"
                             }
                         }
