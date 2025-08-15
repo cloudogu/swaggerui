@@ -368,7 +368,22 @@ timestamps{
                             env.NAMESPACE="ecosystem"
                             env.RUNTIME_ENV="remote"
                             sh "make build"  // target from k8s-dogu.mk
+                            while(true) {
+                                def setupStatus = "init"
+                                try {
+                                    setupStatus = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get dogus --namespace=ecosystem -o jsonpath='{.status.health}'\"")
+                                    if (setupStatus == "available") {
+                                        break
+                                    }
+                                } catch (Exception err) {
+                                    // this is okay
+                                }
+                                sleep(time: 10, unit: 'SECONDS')
+                            }
                         }
+                    }
+                    stage("Run Integration Tests") {
+                        sh "make integration-tests"
                     }
                 } // script
             } // node
