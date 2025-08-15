@@ -374,6 +374,7 @@ timestamps{
                                 def setupStatus = "init"
                                 try {
                                     setupStatus = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get dogus --namespace=ecosystem $doguName -o jsonpath='{.status.health}'\"")
+                                    echo setupStatus
                                     if (setupStatus == "available") {
                                         break
                                     }
