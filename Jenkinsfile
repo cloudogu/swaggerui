@@ -401,7 +401,7 @@ timestamps{
                         }
                     }
                     stage("Run Integration Tests") {
-                        MultinoteEcoSystem ecoSystem = new MultinoteEcoSystem(externalClusterIp)
+                        MultinoteEcoSystem ecoSystem = new MultinoteEcoSystem(this, externalClusterIp)
                         Cypress cypress = new Cypress(this.script, [
                            cypressImage         : "cypress/included:13.15.2",
                            enableVideo          : params.EnableVideoRecording,
@@ -537,8 +537,8 @@ static def escapeToken(String token) {
 class MultinoteEcoSystem extends EcoSystem {
     final _externalIp
 
-    public MultinoteEcoSystem(String _externalIp) {
-        super("", "")
+    public MultinoteEcoSystem(script, String _externalIp) {
+        super(script, "", "")
         this._externalIp = _externalIp
     }
 
