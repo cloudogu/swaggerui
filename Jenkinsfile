@@ -538,6 +538,7 @@ class MultinoteEcoSystem extends EcoSystem {
     final _externalIp
 
     public MultinoteEcoSystem(String _externalIp) {
+        super("", "")
         this._externalIp = _externalIp
     }
 
