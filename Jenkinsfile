@@ -178,90 +178,92 @@ node('vagrant') {
                 */
                 'Setup MN-Cluster' : {
                     node('docker') {
-                        stage('Checkout') {
-                            checkout scm
-                            sh 'git submodule update --init'
-                        }
-                        stage('Provision') {
-                            // change namespace to prerelease_namespace if in develop-branch
-                            if (gitflow.isPreReleaseBranch()) {
-                                sh "make prerelease_namespace"
+                        script {
+                            stage('Checkout') {
+                                checkout scm
+                                sh 'git submodule update --init'
                             }
-                        }
-                        stage('Setup coder') {
-                            script {
-                                withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-                                    sh "curl -L https://coder.com/install.sh | sh"
-                                    sh "coder login https://coder.cloudogu.com --token $token"
+                            stage('Provision') {
+                                // change namespace to prerelease_namespace if in develop-branch
+                                if (gitflow.isPreReleaseBranch()) {
+                                    sh "make prerelease_namespace"
                                 }
                             }
-                        }
-                        stage('Setup YQ') {
-                            script {
-                                sh "sudo snap install yq"
-                            }
-                        } // Stage Setup YQ
-                        stage('Provisioning') {
-                            // diese Dogus sind sehr klein daher teste ich damit
-                            createMNParameter([], [])
-                        } // Stage Provisioning
-                        stage('Setup Cluster') {
-                            script {
-                                if (ClusterName.isEmpty()) {
+                            stage('Setup coder') {
+                                script {
                                     withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-                                        sh """
-                                           coder create  \
-                                               --template $MN_CODER_TEMPLATE \
-                                               --stop-after 1h \
-                                               --preset none \
-                                               --verbose \
-                                               --rich-parameter-file 'integrationTests/mn_params_modified.yaml' \
-                                               --yes \
-                                               --token $token \
-                                               $MN_CODER_WORKSPACE
-                                        """
-                                        // wait one minute for everything to get set up
-                                        sleep(time: 60, unit: 'SECONDS')
-                                        // wait for all dogus to get healthy
-                                        while(true) {
-                                            def setupStatus = "init"
-                                            try {
-                                                setupStatus = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get pods -l app.kubernetes.io/name=k8s-ces-setup -o jsonpath='{.items[*].status.phase}'\"")
-                                                if (setupStatus.isEmpty()) {
-                                                    break
-                                                }
-                                            } catch (Exception err) {
-                                                // this is okay
-                                            }
-                                            if (setupStatus.contains("Failed")) {
-                                                error("Failed to set up mn workspace. K8s-ces-setup failed")
-                                            }
-                                            sleep(time: 10, unit: 'SECONDS')
-                                        }
-                                        // get the cluster name from the kubectx
-                                        ClusterName = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"curl -H 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/attributes/cluster-name\"")
-                                        mnWorkspaceCreated = true
+                                        sh "curl -L https://coder.com/install.sh | sh"
+                                        sh "coder login https://coder.cloudogu.com --token $token"
                                     }
-                                } else {
-                                    MN_CODER_WORKSPACE = ClusterName
                                 }
                             }
-                        } // Stage Setup Cluster
-                        stage ("Get Ces-Password") {
-                            script {
-                                initialCesPassword = getInitialCESPassword(MN_CODER_WORKSPACE)
+                            stage('Setup YQ') {
+                                script {
+                                    sh "sudo snap install yq"
+                                }
+                            } // Stage Setup YQ
+                            stage('Provisioning') {
+                                // diese Dogus sind sehr klein daher teste ich damit
+                                createMNParameter([], [])
+                            } // Stage Provisioning
+                            stage('Setup Cluster') {
+                                script {
+                                    if (ClusterName.isEmpty()) {
+                                        withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+                                            sh """
+                                               coder create  \
+                                                   --template $MN_CODER_TEMPLATE \
+                                                   --stop-after 1h \
+                                                   --preset none \
+                                                   --verbose \
+                                                   --rich-parameter-file 'integrationTests/mn_params_modified.yaml' \
+                                                   --yes \
+                                                   --token $token \
+                                                   $MN_CODER_WORKSPACE
+                                            """
+                                            // wait one minute for everything to get set up
+                                            sleep(time: 60, unit: 'SECONDS')
+                                            // wait for all dogus to get healthy
+                                            while(true) {
+                                                def setupStatus = "init"
+                                                try {
+                                                    setupStatus = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get pods -l app.kubernetes.io/name=k8s-ces-setup -o jsonpath='{.items[*].status.phase}'\"")
+                                                    if (setupStatus.isEmpty()) {
+                                                        break
+                                                    }
+                                                } catch (Exception err) {
+                                                    // this is okay
+                                                }
+                                                if (setupStatus.contains("Failed")) {
+                                                    error("Failed to set up mn workspace. K8s-ces-setup failed")
+                                                }
+                                                sleep(time: 10, unit: 'SECONDS')
+                                            }
+                                            // get the cluster name from the kubectx
+                                            ClusterName = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"curl -H 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/attributes/cluster-name\"")
+                                            mnWorkspaceCreated = true
+                                        }
+                                    } else {
+                                        MN_CODER_WORKSPACE = ClusterName
+                                    }
+                                }
+                            } // Stage Setup Cluster
+                            stage ("Get Ces-Password") {
+                                script {
+                                    initialCesPassword = getInitialCESPassword(MN_CODER_WORKSPACE)
+                                }
+                            } // Stage Get Ces-Password
+                            stage ("Install Dogu to MN") {
+                                script {
+                                    gcloudCommand = getGCloudCommand(MN_CODER_WORKSPACE)
+                                    sh gcloudCommand
+                                    env.NAMESPACE="ecosystem"
+                                    env.RUNTIME_ENV="remote"
+                                    sh "make build"  // target from k8s-dogu.mk
+                                }
                             }
-                        } // Stage Get Ces-Password
-                        stage ("Install Dogu to MN") {
-                            script {
-                                gcloudCommand = getGCloudCommand(MN_CODER_WORKSPACE)
-                                sh gcloudCommand
-                                env.NAMESPACE="ecosystem"
-                                env.RUNTIME_ENV="remote"
-                                sh "make build"  // target from k8s-dogu.mk
-                            }
-                        }
-                    }
+                        } // script
+                    } // node
                 } // Setup CES-Classic
             ) // parallel
 
