@@ -458,7 +458,7 @@ class MultinoteEcoSystem extends EcoSystem {
     public MultinoteEcoSystem(script, String workspace = "") {
         super(script, "", "")
         this.external_ip = _externalIp
-        this.coder_workspace = workspace == "" ? MN_CODER_WORKSPACE
+        this.coder_workspace = workspace == "" ? MN_CODER_WORKSPACE : workspace
     }
 
     void provision(String mountPath, machineType = "n1-standard-4", int timeoutInMinutes = 5) {
