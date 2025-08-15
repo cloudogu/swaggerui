@@ -58,38 +58,32 @@ def getGCloudCommand(workspace) {
     }
 }
 
-node('vagrant') {
-    Git git = new Git(this)
-    GitFlow gitflow = new GitFlow(this, git)
-    doguName="swaggerui"
+Git git = new Git(this)
+GitFlow gitflow = new GitFlow(this, git)
+doguName="swaggerui"
 
-    timestamps{
-        properties([
-                // Keep only the last x builds to preserve space
-                buildDiscarder(logRotator(numToKeepStr: '10')),
-                // Don't run concurrent builds for a branch, because they use the same workspace directory
-                disableConcurrentBuilds(),
-                parameters([
-                        string(name: 'ClusterName', defaultValue: 'test-am-mn-c9506277-791', description: 'Optional: Name of the importing cluster. A new instance gets created if this parameter is not supplied'),
-                        booleanParam(defaultValue: false, description: 'Test dogu upgrade from latest release or optionally from defined version below', name: 'TestDoguUpgrade'),
-                        booleanParam(defaultValue: true, description: 'Enables cypress to record video of the integration tests.', name: 'EnableVideoRecording'),
-                        booleanParam(defaultValue: true, description: 'Enables cypress to take screenshots of failing integration tests.', name: 'EnableScreenshotRecording'),
-                        string(defaultValue: '', description: 'Old Dogu version for the upgrade test (optional; e.g. 4.1.0-3)', name: 'OldDoguVersionForUpgradeTest'),
-                        choice(name: 'TrivySeverityLevels', choices: [TrivySeverityLevel.CRITICAL, TrivySeverityLevel.HIGH_AND_ABOVE, TrivySeverityLevel.MEDIUM_AND_ABOVE, TrivySeverityLevel.ALL], description: 'The levels to scan with trivy', defaultValue: TrivySeverityLevel.CRITICAL),
-                        choice(name: 'TrivyStrategy', choices: [TrivyScanStrategy.UNSTABLE, TrivyScanStrategy.FAIL, TrivyScanStrategy.IGNORE], description: 'Define whether the build should be unstable, fail or whether the error should be ignored if any vulnerability was found.', defaultValue: TrivyScanStrategy.UNSTABLE),
-                ])
+EcoSystem ecoSystem = new EcoSystem(this, "gcloud-ces-operations-internal-packer", "jenkins-gcloud-ces-operations-internal")
+
+timestamps{
+    properties([
+        // Keep only the last x builds to preserve space
+        buildDiscarder(logRotator(numToKeepStr: '10')),
+        // Don't run concurrent builds for a branch, because they use the same workspace directory
+        disableConcurrentBuilds(),
+        parameters([
+                string(name: 'ClusterName', defaultValue: 'test-am-mn-c9506277-791', description: 'Optional: Name of the importing cluster. A new instance gets created if this parameter is not supplied'),
+                booleanParam(defaultValue: false, description: 'Test dogu upgrade from latest release or optionally from defined version below', name: 'TestDoguUpgrade'),
+                booleanParam(defaultValue: true, description: 'Enables cypress to record video of the integration tests.', name: 'EnableVideoRecording'),
+                booleanParam(defaultValue: true, description: 'Enables cypress to take screenshots of failing integration tests.', name: 'EnableScreenshotRecording'),
+                string(defaultValue: '', description: 'Old Dogu version for the upgrade test (optional; e.g. 4.1.0-3)', name: 'OldDoguVersionForUpgradeTest'),
+                choice(name: 'TrivySeverityLevels', choices: [TrivySeverityLevel.CRITICAL, TrivySeverityLevel.HIGH_AND_ABOVE, TrivySeverityLevel.MEDIUM_AND_ABOVE, TrivySeverityLevel.ALL], description: 'The levels to scan with trivy', defaultValue: TrivySeverityLevel.CRITICAL),
+                choice(name: 'TrivyStrategy', choices: [TrivyScanStrategy.UNSTABLE, TrivyScanStrategy.FAIL, TrivyScanStrategy.IGNORE], description: 'Define whether the build should be unstable, fail or whether the error should be ignored if any vulnerability was found.', defaultValue: TrivyScanStrategy.UNSTABLE),
         ])
-        EcoSystem ecoSystem = new EcoSystem(this, "gcloud-ces-operations-internal-packer", "jenkins-gcloud-ces-operations-internal")
-
-        stage('Checkout') {
-            checkout scm
-            sh 'git submodule update --init'
-        }
-
-        try {
-            parallel (
-                /*
-                'Setup CES-Classic' : {
+    ])
+    try {
+        parallel (
+            'Setup CES-Classic' : {
+                node('vagrant') {
                     script {
                         stage('Checkout') {
                             checkout scm
@@ -178,183 +172,182 @@ node('vagrant') {
                                 runIntegrationTests(ecoSystem)
                             }
                         }
+                        if (isReleaseBranch()) {
+                            stage('Finish Release') {
+                                String releaseVersion = getReleaseVersion();
+                                echo "Your release version is: ${releaseVersion}"
+
+                                // Check if tag already exists
+                                if (tagExists("${releaseVersion}")){
+                                    error("You cannot build this version, because it already exists.")
+                                }
+
+                                // Make sure all branches are fetched
+                                sh "git config 'remote.origin.fetch' '+refs/heads/*:refs/remotes/origin/*'"
+                                gitWithCredentials("fetch --all")
+
+                                // Make sure there are no changes on develop
+                                if (developHasChanged(env.BRANCH_NAME)){
+                                    error("There are changes on develop branch that are not merged into release. Please merge and restart process.")
+                                }
+
+                                // Make sure any branch we need exists locally
+                                sh "git checkout ${env.BRANCH_NAME}"
+                                gitWithCredentials("pull origin ${env.BRANCH_NAME}")
+                                sh "git checkout develop"
+                                gitWithCredentials("pull origin develop")
+                                sh "git checkout master"
+                                gitWithCredentials("pull origin master")
+
+                                // Merge release branch into master
+                                sh "git merge --no-ff ${env.BRANCH_NAME}"
+
+                                // Create tag. Use -f because the created tag will persist when build has failed.
+                                gitWithCredentials("tag -f -m 'release version ${releaseVersion}' ${releaseVersion}")
+
+                                // Merge release branch into develop
+                                sh "git checkout develop"
+                                sh "git merge --no-ff ${env.BRANCH_NAME}"
+
+                                // Delete release branch
+                                sh "git branch -d ${env.BRANCH_NAME}"
+
+                                // Checkout tag
+                                sh "git checkout ${releaseVersion}"
+                            }
+
+                            stage ('Push changes to Github'){
+                                // Push changes and tags
+                                gitWithCredentials("push origin master")
+                                gitWithCredentials("push origin develop")
+                                gitWithCredentials("push origin --tags")
+                                gitWithCredentials("push origin --delete ${env.BRANCH_NAME}")
+                            }
+
+                            stage('Push Dogu to registry') {
+                                ecoSystem.push("/dogu")
+                            }
+
+                            //Create release on Github
+                            changelog = ""
+                            try{
+                                stage ('Get Changelog'){
+                                    changelog = getChangelog(releaseVersion)
+                                }
+                            } catch(Exception e){
+                                echo "Failed to read changes in changelog due to error: ${e}"
+                                echo "Please manually update github release."
+                            }
+                            try{
+                                stage ('Add Github-Release'){
+                                    echo "The description of github release will be: >>>${changelog}<<<"
+                                    addGithubRelease(releaseVersion, changelog, git)
+                                }
+                            } catch(Exception e) {
+                                echo "Release failed due to error: ${e}"
+                            }
+                        } else if (gitflow.isPreReleaseBranch()) {
+                             // push to registry in prerelease_namespace
+                             stage('Push Prerelease Dogu to registry') {
+                                 ecoSystem.pushPreRelease("/dogu")
+                             }
+                         }
                     } // script
-                }, // Parallel Setup CES-Classic
-                */
-                'Setup MN-Cluster' : {
-                    node('docker') {
-                        script {
-                            stage('Provision') {
-                                // change namespace to prerelease_namespace if in develop-branch
-                                if (gitflow.isPreReleaseBranch()) {
-                                    sh "make prerelease_namespace"
+                } // node
+            }, // Parallel Setup CES-Classic
+            'Setup MN-Cluster' : {
+                node('docker') {
+                    script {
+                        stage('Provision') {
+                            // change namespace to prerelease_namespace if in develop-branch
+                            if (gitflow.isPreReleaseBranch()) {
+                                sh "make prerelease_namespace"
+                            }
+                        }
+                        stage('Setup coder') {
+                            script {
+                                withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+                                    sh "curl -L https://coder.com/install.sh | sh"
+                                    sh "coder login https://coder.cloudogu.com --token $token"
                                 }
                             }
-                            stage('Setup coder') {
-                                script {
+                        }
+                        stage('Setup YQ') {
+                            script {
+                                sh "sudo snap install yq"
+                            }
+                        } // Stage Setup YQ
+                        stage('Provisioning') {
+                            // diese Dogus sind sehr klein daher teste ich damit
+                            createMNParameter([], [])
+                        } // Stage Provisioning
+                        stage('Setup Cluster') {
+                            script {
+                                if (ClusterName.isEmpty()) {
                                     withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-                                        sh "curl -L https://coder.com/install.sh | sh"
-                                        sh "coder login https://coder.cloudogu.com --token $token"
-                                    }
-                                }
-                            }
-                            stage('Setup YQ') {
-                                script {
-                                    sh "sudo snap install yq"
-                                }
-                            } // Stage Setup YQ
-                            stage('Provisioning') {
-                                // diese Dogus sind sehr klein daher teste ich damit
-                                createMNParameter([], [])
-                            } // Stage Provisioning
-                            stage('Setup Cluster') {
-                                script {
-                                    if (ClusterName.isEmpty()) {
-                                        withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-                                            sh """
-                                               coder create  \
-                                                   --template $MN_CODER_TEMPLATE \
-                                                   --stop-after 1h \
-                                                   --preset none \
-                                                   --verbose \
-                                                   --rich-parameter-file 'integrationTests/mn_params_modified.yaml' \
-                                                   --yes \
-                                                   --token $token \
-                                                   $MN_CODER_WORKSPACE
-                                            """
-                                            // wait one minute for everything to get set up
-                                            sleep(time: 60, unit: 'SECONDS')
-                                            // wait for all dogus to get healthy
-                                            while(true) {
-                                                def setupStatus = "init"
-                                                try {
-                                                    setupStatus = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get pods -l app.kubernetes.io/name=k8s-ces-setup -o jsonpath='{.items[*].status.phase}'\"")
-                                                    if (setupStatus.isEmpty()) {
-                                                        break
-                                                    }
-                                                } catch (Exception err) {
-                                                    // this is okay
+                                        sh """
+                                           coder create  \
+                                               --template $MN_CODER_TEMPLATE \
+                                               --stop-after 1h \
+                                               --preset none \
+                                               --verbose \
+                                               --rich-parameter-file 'integrationTests/mn_params_modified.yaml' \
+                                               --yes \
+                                               --token $token \
+                                               $MN_CODER_WORKSPACE
+                                        """
+                                        // wait one minute for everything to get set up
+                                        sleep(time: 60, unit: 'SECONDS')
+                                        // wait for all dogus to get healthy
+                                        while(true) {
+                                            def setupStatus = "init"
+                                            try {
+                                                setupStatus = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get pods -l app.kubernetes.io/name=k8s-ces-setup -o jsonpath='{.items[*].status.phase}'\"")
+                                                if (setupStatus.isEmpty()) {
+                                                    break
                                                 }
-                                                if (setupStatus.contains("Failed")) {
-                                                    error("Failed to set up mn workspace. K8s-ces-setup failed")
-                                                }
-                                                sleep(time: 10, unit: 'SECONDS')
+                                            } catch (Exception err) {
+                                                // this is okay
                                             }
-                                            // get the cluster name from the kubectx
-                                            ClusterName = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"curl -H 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/attributes/cluster-name\"")
-                                            mnWorkspaceCreated = true
+                                            if (setupStatus.contains("Failed")) {
+                                                error("Failed to set up mn workspace. K8s-ces-setup failed")
+                                            }
+                                            sleep(time: 10, unit: 'SECONDS')
                                         }
-                                    } else {
-                                        MN_CODER_WORKSPACE = ClusterName
+                                        // get the cluster name from the kubectx
+                                        ClusterName = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"curl -H 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/attributes/cluster-name\"")
+                                        mnWorkspaceCreated = true
                                     }
-                                }
-                            } // Stage Setup Cluster
-                            stage ("Get Ces-Password") {
-                                script {
-                                    initialCesPassword = getInitialCESPassword(MN_CODER_WORKSPACE)
-                                }
-                            } // Stage Get Ces-Password
-                            stage ("Install Dogu to MN") {
-                                script {
-                                    gcloudCommand = getGCloudCommand(MN_CODER_WORKSPACE)
-                                    sh gcloudCommand
-                                    env.NAMESPACE="ecosystem"
-                                    env.RUNTIME_ENV="remote"
-                                    sh "make build"  // target from k8s-dogu.mk
+                                } else {
+                                    MN_CODER_WORKSPACE = ClusterName
                                 }
                             }
-                        } // script
-                    } // node
-                } // Setup CES-Classic
-            ) // parallel
-
-            if (isReleaseBranch()) {
-                stage('Finish Release') {
-                    String releaseVersion = getReleaseVersion();
-                    echo "Your release version is: ${releaseVersion}"
-
-                    // Check if tag already exists
-                    if (tagExists("${releaseVersion}")){
-                        error("You cannot build this version, because it already exists.")
-                    }
-
-                    // Make sure all branches are fetched
-                    sh "git config 'remote.origin.fetch' '+refs/heads/*:refs/remotes/origin/*'"
-                    gitWithCredentials("fetch --all")
-
-                    // Make sure there are no changes on develop
-                    if (developHasChanged(env.BRANCH_NAME)){
-                        error("There are changes on develop branch that are not merged into release. Please merge and restart process.")
-                    }
-
-                    // Make sure any branch we need exists locally
-                    sh "git checkout ${env.BRANCH_NAME}"
-                    gitWithCredentials("pull origin ${env.BRANCH_NAME}")
-                    sh "git checkout develop"
-                    gitWithCredentials("pull origin develop")
-                    sh "git checkout master"
-                    gitWithCredentials("pull origin master")
-
-                    // Merge release branch into master
-                    sh "git merge --no-ff ${env.BRANCH_NAME}"
-
-                    // Create tag. Use -f because the created tag will persist when build has failed.
-                    gitWithCredentials("tag -f -m 'release version ${releaseVersion}' ${releaseVersion}")
-
-                    // Merge release branch into develop
-                    sh "git checkout develop"
-                    sh "git merge --no-ff ${env.BRANCH_NAME}"
-
-                    // Delete release branch
-                    sh "git branch -d ${env.BRANCH_NAME}"
-
-                    // Checkout tag
-                    sh "git checkout ${releaseVersion}"
-                }
-
-                stage ('Push changes to Github'){
-                    // Push changes and tags
-                    gitWithCredentials("push origin master")
-                    gitWithCredentials("push origin develop")
-                    gitWithCredentials("push origin --tags")
-                    gitWithCredentials("push origin --delete ${env.BRANCH_NAME}")
-                }
-
-                stage('Push Dogu to registry') {
-                    ecoSystem.push("/dogu")
-                }
-
-                //Create release on Github
-                changelog = ""
-                try{
-                    stage ('Get Changelog'){
-                        changelog = getChangelog(releaseVersion)
-                    }
-                } catch(Exception e){
-                    echo "Failed to read changes in changelog due to error: ${e}"
-                    echo "Please manually update github release."
-                }
-                try{
-                    stage ('Add Github-Release'){
-                        echo "The description of github release will be: >>>${changelog}<<<"
-                        addGithubRelease(releaseVersion, changelog, git)
-                    }
-                } catch(Exception e) {
-                    echo "Release failed due to error: ${e}"
-                }
-            } else if (gitflow.isPreReleaseBranch()) {
-                 // push to registry in prerelease_namespace
-                 stage('Push Prerelease Dogu to registry') {
-                     ecoSystem.pushPreRelease("/dogu")
-                 }
-             }
-        } finally {
-            stage('Clean') {
-                ecoSystem.destroy()
-            }
+                        } // Stage Setup Cluster
+                        stage ("Get Ces-Password") {
+                            script {
+                                initialCesPassword = getInitialCESPassword(MN_CODER_WORKSPACE)
+                            }
+                        } // Stage Get Ces-Password
+                        stage ("Install Dogu to MN") {
+                            script {
+                                gcloudCommand = getGCloudCommand(MN_CODER_WORKSPACE)
+                                sh gcloudCommand
+                                env.NAMESPACE="ecosystem"
+                                env.RUNTIME_ENV="remote"
+                                sh "make build"  // target from k8s-dogu.mk
+                            }
+                        }
+                    } // script
+                } // node
+            } // Setup CES-Classic
+        ) // parallel
+    } finally {
+        stage('Clean') {
+            ecoSystem.destroy()
         }
     }
-}
+    }
+} // timestamps
 
 def runIntegrationTests(EcoSystem ecoSystem) {
     ecoSystem.runCypressIntegrationTests([
