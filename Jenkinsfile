@@ -349,7 +349,7 @@ timestamps{
                     }
                     stage ("Authenticate to Docker") {
                         script {
-                            withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId   : "harborrobotprerelease", usernameVariable: 'TOKEN_ID', passwordVariable: 'TOKEN_SECRET']]) {
+                            withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId   : "cesmarvin-setup", usernameVariable: 'TOKEN_ID', passwordVariable: 'TOKEN_SECRET']]) {
                                 sh "docker login -u ${escapeToken(env.TOKEN_ID)} -p ${escapeToken(env.TOKEN_SECRET)} registry.cloudogu.com"
                             }
                         }
