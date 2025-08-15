@@ -457,7 +457,6 @@ class MultinoteEcoSystem extends EcoSystem {
 
     public MultinoteEcoSystem(script, String workspace = "") {
         super(script, "", "")
-        this.external_ip = _externalIp
         this.coder_workspace = workspace == "" ? MN_CODER_WORKSPACE : workspace
     }
 
@@ -525,7 +524,10 @@ class MultinoteEcoSystem extends EcoSystem {
     }
 
     public String getExternalIP() {
-        return external_ip
+        withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+            ip = sh(returnStdout: true, script: "coder ssh $workspace \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
+            return ip
+        }
     }
 
     void build(String doguPath) {
