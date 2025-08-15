@@ -46,14 +46,14 @@ def createMNParameter(List dogusToAdd = [], List componentsToAdd = []) {
 
 def getInitialCESPassword(workspace) {
     withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-        password = sh(returnStdout: true, script: "coder ls --search team-ces/$workspace -o json --token $token | yq '.0.latest_build.resources.0.metadata[] | select(.key == \"Initial CES Password\") | .value'")
+        password = sh(returnStdout: true, script: "coder ls --search team-ces/$workspace -o json --token $token | .bin/yq '.0.latest_build.resources.0.metadata[] | select(.key == \"Initial CES Password\") | .value'")
         return password
     }
 }
 
 def getGCloudCommand(workspace) {
     withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-        command = initialCesPassword = sh(returnStdout: true, script: "coder ls --search team-ces/$workspace -o json --token $token | yq '.0.latest_build.resources.0.metadata[] | select(.key == \"Cluster Connection Command\") | .value'")
+        command = initialCesPassword = sh(returnStdout: true, script: "coder ls --search team-ces/$workspace -o json --token $token | .bin/yq '.0.latest_build.resources.0.metadata[] | select(.key == \"Cluster Connection Command\") | .value'")
         return command
     }
 }
@@ -280,7 +280,7 @@ timestamps{
                     }
                     stage('Setup YQ') {
                         script {
-                            sh "sudo snap install yq"
+                            sh "make install-yq"
                         }
                     } // Stage Setup YQ
                     stage('Provisioning') {
@@ -341,17 +341,20 @@ timestamps{
                             }
                         }
                     }
+                    stage ("Authenticate to Docker") {
+                        script {
+                            withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId   : "harborrobotprerelease", usernameVariable: 'TOKEN_ID', passwordVariable: 'TOKEN_SECRET']]) {
+                                sh "docker login -u ${escapeToken(env.TOKEN_ID)} -p ${escapeToken(env.TOKEN_SECRET)} registry.cloudogu.com"
+                            }
+                        }
+                    }
                     stage ("Install Dogu to MN") {
-                        withCredentials([[$class          : 'UsernamePasswordMultiBinding',
-                                                      credentialsId   : "harborrobotprerelease",
-                                                      usernameVariable: 'TOKEN_ID',
-                                                      passwordVariable: 'TOKEN_SECRET']]) {
-                            sh "docker login -u ${escapeToken(env.TOKEN_ID)} -p ${escapeToken(env.TOKEN_SECRET)} registry.cloudogu.com"
+                        script {
                             gcloudCommand = getGCloudCommand(MN_CODER_WORKSPACE)
                             sh gcloudCommand
                             env.NAMESPACE="ecosystem"
                             env.RUNTIME_ENV="remote"
-                            sh "make compile-generic"  // target from k8s-dogu.mk
+                            sh "make build"  // target from k8s-dogu.mk
                         }
                     }
                 } // script
