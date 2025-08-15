@@ -77,6 +77,7 @@ timestamps{
     ])
 
     parallel (
+    /*
         'Setup CES-Classic' : {
             node('vagrant') {
                 script {
@@ -259,6 +260,7 @@ timestamps{
                 } // script
             } // node
         }, // Parallel Setup CES-Classic
+        */
         'Setup MN-Cluster' : {
             node('docker') {
                 script {
