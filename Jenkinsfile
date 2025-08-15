@@ -15,37 +15,6 @@ def externalClusterIp
 
 def doguName="swaggerui"
 
-def createMNParameter(List dogusToAdd = [], List componentsToAdd = []) {
-    def inputFile = 'integrationTests/mn_params.yaml'
-    def outputFile = 'integrationTests/mn_params_modified.yaml'
-
-    def yamlData = readYaml file: inputFile
-
-    // Listen initialisieren, falls null
-    yamlData['Additional dogus'] = yamlData['Additional dogus'] ?: []
-    yamlData['Additional components'] = yamlData['Additional components'] ?: []
-
-    // Elemente hinzufügen, ohne Duplikate
-    dogusToAdd.each { d ->
-        if (!yamlData['Additional dogus'].contains(d)) {
-            yamlData['Additional dogus'] << d
-        }
-    }
-    componentsToAdd.each { c ->
-        if (!yamlData['Additional components'].contains(c)) {
-            yamlData['Additional components'] << c
-        }
-    }
-
-    // Vorherige Datei löschen, falls existiert
-    sh "rm -f ${outputFile}"
-
-    // YAML schreiben
-    writeYaml file: outputFile, data: yamlData
-
-    echo "Modified YAML written to ${outputFile}"
-    return outputFile
-}
 
 def getInitialCESPassword(workspace) {
     withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
@@ -276,75 +245,19 @@ timestamps{
                 script {
                     Git git = new Git(this)
                     GitFlow gitflow = new GitFlow(this, git)
+
+                    MultinoteEcoSystem ecoSystem = new MultinoteEcoSystem(this)
+
                     stage('Checkout') {
                         checkout scm
                         sh 'git submodule update --init'
                     }
-                    stage('Setup Go') {
-                        script {
-                           sh "sudo apt update && sudo apt install -y golang"
-                        }
+                    stage('Setup') {
+                        def defaultSetupConfig = [
+                            clustername: ClusterName
+                        ]
+                        ecoSystem.setup(defaultSetupConfig)
                     }
-                    stage('Setup coder') {
-                        script {
-                            withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-                                sh "curl -L https://coder.com/install.sh | sh"
-                                sh "coder login https://coder.cloudogu.com --token $token"
-                            }
-                        }
-                    }
-                    stage('Setup YQ') {
-                        script {
-                            env.RUNTIME_ENV="remote"
-                            sh "make install-yq"
-                        }
-                    } // Stage Setup YQ
-                    stage('Provisioning') {
-                        // diese Dogus sind sehr klein daher teste ich damit
-                        createMNParameter([], [])
-                    } // Stage Provisioning
-                    stage('Setup Cluster') {
-                        script {
-                            if (ClusterName.isEmpty()) {
-                                withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-                                    sh """
-                                       coder create  \
-                                           --template $MN_CODER_TEMPLATE \
-                                           --stop-after 1h \
-                                           --preset none \
-                                           --verbose \
-                                           --rich-parameter-file 'integrationTests/mn_params_modified.yaml' \
-                                           --yes \
-                                           --token $token \
-                                           $MN_CODER_WORKSPACE
-                                    """
-                                    // wait one minute for everything to get set up
-                                    sleep(time: 60, unit: 'SECONDS')
-                                    // wait for all dogus to get healthy
-                                    while(true) {
-                                        def setupStatus = "init"
-                                        try {
-                                            setupStatus = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get pods -l app.kubernetes.io/name=k8s-ces-setup -o jsonpath='{.items[*].status.phase}'\"")
-                                            if (setupStatus.isEmpty()) {
-                                                break
-                                            }
-                                        } catch (Exception err) {
-                                            // this is okay
-                                        }
-                                        if (setupStatus.contains("Failed")) {
-                                            error("Failed to set up mn workspace. K8s-ces-setup failed")
-                                        }
-                                        sleep(time: 10, unit: 'SECONDS')
-                                    }
-                                    // get the cluster name from the kubectx
-                                    ClusterName = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"curl -H 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/attributes/cluster-name\"")
-                                    mnWorkspaceCreated = true
-                                }
-                            } else {
-                                MN_CODER_WORKSPACE = ClusterName
-                            }
-                        }
-                    } // Stage Setup Cluster
                     stage ("Get Ces-Password") {
                         script {
                             initialCesPassword = getInitialCESPassword(MN_CODER_WORKSPACE)
@@ -401,7 +314,6 @@ timestamps{
                         }
                     }
                     stage("Run Integration Tests") {
-                        MultinoteEcoSystem ecoSystem = new MultinoteEcoSystem(this, externalClusterIp)
                         Cypress cypress = new Cypress(this, [
                            cypressImage         : "cypress/included:13.15.2",
                            enableVideo          : params.EnableVideoRecording,
@@ -535,15 +447,156 @@ static def escapeToken(String token) {
 }
 
 class MultinoteEcoSystem extends EcoSystem {
-    final _externalIp
 
-    public MultinoteEcoSystem(script, String _externalIp) {
+    def CODER_SUFFIX = UUID.randomUUID().toString().substring(0,12)
+    def MN_CODER_TEMPLATE = 'k8s-ces-cluster'
+    def MN_CODER_WORKSPACE = 'test-am-mn-' + CODER_SUFFIX
+
+    String coder_workspace
+    String external_ip
+
+    public MultinoteEcoSystem(script, String workspace = "") {
         super(script, "", "")
-        this._externalIp = _externalIp
+        this.external_ip = _externalIp
+        this.coder_workspace = workspace == "" ? MN_CODER_WORKSPACE
+    }
+
+    void provision(String mountPath, machineType = "n1-standard-4", int timeoutInMinutes = 5) {
+        script.dir('ecosystem') {
+            script.git branch: 'develop', url: 'https://github.com/cloudogu/ecosystem', changelog: false, poll: false
+        }
+        script.timeout(time: timeoutInMinutes, unit: 'MINUTES') {
+            vagrant = createVagrant(mountPath, machineType)
+            this.mountPath = mountPath
+
+            vagrant.up()
+            externalIP = vagrant.externalIP
+        }
+    }
+
+    void provision(String mountPath, machineType = "n1-standard-4", int timeoutInMinutes = 5) {
+        // isEmpty
+        return
+    }
+
+    void setup(config = [:]) {
+        // Merge default config with the one passed as parameter
+        currentConfig = defaultSetupConfig << config
+        writeSetupStagingJSON(currentConfig)
+
+        // setup go
+        sh "sudo apt update && sudo apt install -y golang"
+
+        // setup yq
+        sh "make install-yq"
+
+        // setup coder
+        withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+            sh "curl -L https://coder.com/install.sh | sh"
+            sh "coder login https://coder.cloudogu.com --token $token"
+        }
+
+        createMNParameter(config.dependencies, [])
+
+        if (config.clustername.isEmpty()) {
+            withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+                sh """
+                   coder create  \
+                       --template $MN_CODER_TEMPLATE \
+                       --stop-after 1h \
+                       --preset none \
+                       --verbose \
+                       --rich-parameter-file 'integrationTests/mn_params_modified.yaml' \
+                       --yes \
+                       --token $token \
+                       $coder_workspace
+                """
+            }
+            // wait for all dogus to get healthy
+            def counter = 0
+            while(counter < 360) {
+                def setupStatus = "init"
+                try {
+                    setupStatus = sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get pods -l app.kubernetes.io/name=k8s-ces-setup -o jsonpath='{.items[*].status.phase}'\"")
+                    if (setupStatus.isEmpty()) {
+                        break
+                    }
+                } catch (Exception err) {
+                    // this is okay
+                }
+                if (setupStatus.contains("Failed")) {
+                    error("Failed to set up mn workspace. K8s-ces-setup failed")
+                }
+                sleep(time: 10, unit: 'SECONDS')
+                counter++
+            }
+            coder_workspace = sh(returnStdout: true, script: "coder ssh $coder_workspace \"curl -H 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/attributes/cluster-name\"")
+        } else {
+            coder_workspace = config.clustername
+        }
+
     }
 
     public String getExternalIP() {
         return _externalIp
     }
 
+    void build(String doguPath) {
+        gcloudCommand = getGCloudCommand(coder_workspace)
+        sh gcloudCommand
+        env.NAMESPACE="ecosystem"
+        env.RUNTIME_ENV="remote"
+
+        sh "make build"  // target from k8s-dogu.mk
+    }
+
+    void waitForDogu(String dogu) {
+        def counter = 0
+        while(counter < 30) {
+            def setupStatus = "init"
+            try {
+                setupStatus = sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get dogus --namespace=ecosystem $dogu -o jsonpath='{.status.health}'\"")
+                echo setupStatus
+                if (setupStatus == "available") {
+                    break
+                }
+            } catch (Exception err) {
+                // this is okay
+            }
+            sleep(time: 10, unit: 'SECONDS')
+            counter++
+        }
+    }
+
+    void createMNParameter(List dogusToAdd = [], List componentsToAdd = []) {
+        def inputFile = 'integrationTests/mn_params.yaml'
+        def outputFile = 'integrationTests/mn_params_modified.yaml'
+
+        def yamlData = readYaml file: inputFile
+
+        // Listen initialisieren, falls null
+        yamlData['Additional dogus'] = yamlData['Additional dogus'] ?: []
+        yamlData['Additional components'] = yamlData['Additional components'] ?: []
+
+        // Elemente hinzufügen, ohne Duplikate
+        dogusToAdd.each { d ->
+            if (!yamlData['Additional dogus'].contains(d)) {
+                yamlData['Additional dogus'] << d
+            }
+        }
+        componentsToAdd.each { c ->
+            if (!yamlData['Additional components'].contains(c)) {
+                yamlData['Additional components'] << c
+            }
+        }
+
+        // Vorherige Datei löschen, falls existiert
+        sh "rm -f ${outputFile}"
+
+        // YAML schreiben
+        writeYaml file: outputFile, data: yamlData
+
+        echo "Modified YAML written to ${outputFile}"
+        return outputFile
+    }
 }
