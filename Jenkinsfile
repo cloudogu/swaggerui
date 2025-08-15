@@ -11,6 +11,7 @@ def classicWorkspaceCreated = false
 def testImage
 def initialCesPassword
 def gcloudCommand
+def externalClusterIp
 
 def doguName="swaggerui"
 
@@ -57,6 +58,13 @@ def getGCloudCommand(workspace) {
     withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
         command = initialCesPassword = sh(returnStdout: true, script: "coder ls --search team-ces/$workspace -o json --token $token | .bin/yq '.0.latest_build.resources.0.metadata[] | select(.key == \"Cluster Connection Command\") | .value'")
         return command
+    }
+}
+
+def getExternalClusterIP(workspace) {
+    withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+        ip = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
+        return ip
     }
 }
 
@@ -340,6 +348,13 @@ timestamps{
                     stage ("Get Ces-Password") {
                         script {
                             initialCesPassword = getInitialCESPassword(MN_CODER_WORKSPACE)
+                            currentBuild.description = "Ces-Password: ${initialCesPassword}"
+                        }
+                    } // Stage Get Ces-Password
+                    stage ("Get External Ip") {
+                        script {
+                            externalClusterIp = getExternalClusterIP(MN_CODER_WORKSPACE)
+                            currentBuild.description += "External IP: ${externalClusterIp}"
                         }
                     } // Stage Get Ces-Password
                     stage ("Authenticate to GCloud") {
@@ -386,7 +401,24 @@ timestamps{
                         }
                     }
                     stage("Run Integration Tests") {
-                        sh "make integration-tests"
+                        MultinoteEcoSystem ecoSystem = new MultinoteEcoSystem(externalClusterIp)
+                        Cypress cypress = new Cypress(this.script, [
+                           cypressImage         : "cypress/included:13.15.2",
+                           enableVideo          : params.EnableVideoRecording,
+                           enableScreenshots    : params.EnableScreenshotRecording
+                        ])
+                        try {
+                            def newUrl = "https://$externalClusterIp"
+
+                            // Sed-Befehl für Linux/macOS
+                            sh """
+                            sed -i 's|baseUrl: .*|baseUrl: "${newUrl}",|' integrationTests/cypress.config.js
+                            """
+                            cypress.preTestWork()
+                            cypress.runIntegrationTests(ecoSystem)
+                        } finally {
+                            cypress.archiveVideosAndScreenshots()
+                        }
                     }
                 } // script
             } // node
@@ -500,4 +532,17 @@ boolean developHasChanged(String releaseBranchName){
 static def escapeToken(String token) {
     token = token.replaceAll("\\\$", '\\\\\\\$')
     return token
+}
+
+class MultinoteEcoSystem extends EcoSystem {
+    final _externalIp
+
+    public MultinoteEcoSystem(String _externalIp) {
+        this._externalIp = _externalIp
+    }
+
+    public String getExternalIP() {
+    return _externalIp
+    }
+
 }
