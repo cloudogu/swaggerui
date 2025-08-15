@@ -470,22 +470,22 @@ class MultinoteEcoSystem extends EcoSystem {
         currentConfig = defaultSetupConfig << config
 
         // setup go
-        sh "sudo apt update && sudo apt install -y golang"
+        script.sh "sudo apt update && sudo apt install -y golang"
 
         // setup yq
-        sh "make install-yq"
+        script.sh "make install-yq"
 
         // setup coder
-        withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-            sh "curl -L https://coder.com/install.sh | sh"
-            sh "coder login https://coder.cloudogu.com --token $token"
+        script.withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+            script.sh "curl -L https://coder.com/install.sh | sh"
+            script.sh "coder login https://coder.cloudogu.com --token $token"
         }
 
         createMNParameter(config.dependencies, [])
 
         if (config.clustername.isEmpty()) {
-            withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-                sh """
+            script.withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+                script.sh """
                    coder create  \
                        --template $MN_CODER_TEMPLATE \
                        --stop-after 1h \
@@ -502,7 +502,7 @@ class MultinoteEcoSystem extends EcoSystem {
             while(counter < 360) {
                 def setupStatus = "init"
                 try {
-                    setupStatus = sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get pods -l app.kubernetes.io/name=k8s-ces-setup -o jsonpath='{.items[*].status.phase}'\"")
+                    setupStatus = script.sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get pods -l app.kubernetes.io/name=k8s-ces-setup -o jsonpath='{.items[*].status.phase}'\"")
                     if (setupStatus.isEmpty()) {
                         break
                     }
@@ -515,7 +515,7 @@ class MultinoteEcoSystem extends EcoSystem {
                 sleep(time: 10, unit: 'SECONDS')
                 counter++
             }
-            coder_workspace = sh(returnStdout: true, script: "coder ssh $coder_workspace \"curl -H 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/attributes/cluster-name\"")
+            coder_workspace = script.sh(returnStdout: true, script: "coder ssh $coder_workspace \"curl -H 'Metadata-Flavor: Google' http://metadata.google.internal/computeMetadata/v1/instance/attributes/cluster-name\"")
         } else {
             coder_workspace = config.clustername
         }
@@ -523,7 +523,7 @@ class MultinoteEcoSystem extends EcoSystem {
     }
 
     public String getExternalIP() {
-        withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+        script.withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
             ip = sh(returnStdout: true, script: "coder ssh $workspace \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
             return ip
         }
@@ -531,11 +531,11 @@ class MultinoteEcoSystem extends EcoSystem {
 
     void build(String doguPath) {
         gcloudCommand = getGCloudCommand(coder_workspace)
-        sh gcloudCommand
-        env.NAMESPACE="ecosystem"
-        env.RUNTIME_ENV="remote"
+        script.sh gcloudCommand
+        script.env.NAMESPACE="ecosystem"
+        script.env.RUNTIME_ENV="remote"
 
-        sh "make build"  // target from k8s-dogu.mk
+        script.sh "make build"  // target from k8s-dogu.mk
     }
 
     void waitForDogu(String dogu) {
@@ -543,7 +543,7 @@ class MultinoteEcoSystem extends EcoSystem {
         while(counter < 30) {
             def setupStatus = "init"
             try {
-                setupStatus = sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get dogus --namespace=ecosystem $dogu -o jsonpath='{.status.health}'\"")
+                setupStatus = script.sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get dogus --namespace=ecosystem $dogu -o jsonpath='{.status.health}'\"")
                 echo setupStatus
                 if (setupStatus == "available") {
                     break
@@ -579,12 +579,12 @@ class MultinoteEcoSystem extends EcoSystem {
         }
 
         // Vorherige Datei löschen, falls existiert
-        sh "rm -f ${outputFile}"
+        script.sh "rm -f ${outputFile}"
 
         // YAML schreiben
-        writeYaml file: outputFile, data: yamlData
+        script.writeYaml file: outputFile, data: yamlData
 
-        echo "Modified YAML written to ${outputFile}"
+        script.echo "Modified YAML written to ${outputFile}"
         return outputFile
     }
 }
