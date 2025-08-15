@@ -63,7 +63,7 @@ def getGCloudCommand(workspace) {
 
 def getExternalClusterIP(workspace) {
     withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-        ip = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
+        ip = sh(returnStdout: true, script: "coder ssh $workspace \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
         return ip
     }
 }
