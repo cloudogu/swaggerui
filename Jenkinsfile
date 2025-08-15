@@ -462,3 +462,8 @@ boolean developHasChanged(String releaseBranchName){
         return false
     }
 }
+
+static def escapeToken(String token) {
+    token = token.replaceAll("\\\$", '\\\\\\\$')
+    return token
+}
