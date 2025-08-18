@@ -38,7 +38,7 @@ timestamps{
         // Don't run concurrent builds for a branch, because they use the same workspace directory
         disableConcurrentBuilds(),
         parameters([
-                string(name: 'ClusterName', defaultValue: 'test-am-mn-c9506277-791', description: 'Optional: Name of the importing cluster. A new instance gets created if this parameter is not supplied'),
+                string(name: 'ClusterName', defaultValue: 'test-am-mn-bdb82308-262', description: 'Optional: Name of the importing cluster. A new instance gets created if this parameter is not supplied'),
                 booleanParam(defaultValue: false, description: 'Test dogu upgrade from latest release or optionally from defined version below', name: 'TestDoguUpgrade'),
                 booleanParam(defaultValue: true, description: 'Enables cypress to record video of the integration tests.', name: 'EnableVideoRecording'),
                 booleanParam(defaultValue: true, description: 'Enables cypress to take screenshots of failing integration tests.', name: 'EnableScreenshotRecording'),
