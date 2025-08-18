@@ -433,6 +433,7 @@ class MultinoteEcoSystem extends EcoSystem {
             script.sh "coder login https://coder.cloudogu.com --token ${script.env.token}"
         }
 
+        // patch mn-Parameter
         createMNParameter(config.dependencies, [])
 
         if (config.clustername.isEmpty()) {
@@ -472,7 +473,7 @@ class MultinoteEcoSystem extends EcoSystem {
             coder_workspace = config.clustername
         }
 
-        script.withCredentials([file(credentialsId: 'jenkins_workspace_gcloud_key', variable: 'SERVICE_ACCOUNT_JSON')]) {
+        script.withCredentials([script.file(credentialsId: 'jenkins_workspace_gcloud_key', variable: 'SERVICE_ACCOUNT_JSON')]) {
             script.sh "gcloud auth activate-service-account --key-file=${script.env.SERVICE_ACCOUNT_JSON}"
             script.sh "curl -LO \"https://dl.k8s.io/release/\$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\""
             script.sh "chmod +x kubectl"
