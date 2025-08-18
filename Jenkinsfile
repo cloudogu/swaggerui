@@ -262,12 +262,12 @@ timestamps{
                         script {
                             env.NAMESPACE="ecosystem"
                             env.RUNTIME_ENV="remote"
-                            ecoSystem.build($doguName)
+                            ecoSystem.build(doguName)
                         }
                     }
                     stage ("Wait for Dogu") {
                         script {
-                            ecoSystem.waitForDogu($doguName)
+                            ecoSystem.waitForDogu(doguName)
                         }
                     }
                     stage("Run Integration Tests") {
