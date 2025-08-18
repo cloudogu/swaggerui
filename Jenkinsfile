@@ -519,7 +519,7 @@ class MultinoteEcoSystem extends EcoSystem {
         def newUrl = "https://$ip"
 
         // Sed-Befehl für Linux/macOS
-        sh """
+        script.sh """
         sed -i 's|baseUrl: .*|baseUrl: "${newUrl}",|' ./integrationTests/cypress.config.ts
         """
         try {
