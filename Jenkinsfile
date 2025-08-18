@@ -264,11 +264,13 @@ timestamps{
                         }
                     }
                     stage("Run Integration Tests") {
-                        ecoSystem.runCypressIntegrationTests([
+                        script {
+                            ecoSystem.runCypressIntegrationTests([
                                 cypressImage         : "cypress/included:13.15.2",
                                 enableVideo          : params.EnableVideoRecording,
                                 enableScreenshots    : params.EnableScreenshotRecording
-                        ])
+                            ])
+                        }
                     }
                 } // script
             } // node
@@ -479,8 +481,8 @@ class MultinoteEcoSystem extends EcoSystem {
     }
 
     public String getExternalIP() {
-        script.withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-            ip = sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
+        script.withCredentials([script.string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+            ip = script.sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
             return ip
         }
     }
@@ -498,11 +500,12 @@ class MultinoteEcoSystem extends EcoSystem {
             def setupStatus = "init"
             try {
                 setupStatus = script.sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get dogus --namespace=ecosystem $dogu -o jsonpath='{.status.health}'\"")
-                echo setupStatus
+                script.echo setupStatus
                 if (setupStatus == "available") {
                     break
                 }
             } catch (Exception err) {
+                script.echo err
                 // this is okay
             }
             script.sleep(time: 10, unit: 'SECONDS')
