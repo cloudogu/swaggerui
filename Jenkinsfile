@@ -23,13 +23,6 @@ def getInitialCESPassword(workspace) {
     }
 }
 
-def getGCloudCommand(workspace) {
-    withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-        command = initialCesPassword = sh(returnStdout: true, script: "coder ls --search team-ces/$workspace -o json --token $token | .bin/yq '.0.latest_build.resources.0.metadata[] | select(.key == \"Cluster Connection Command\") | .value'")
-        return command
-    }
-}
-
 def getExternalClusterIP(workspace) {
     withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
         ip = sh(returnStdout: true, script: "coder ssh $workspace \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
@@ -461,6 +454,7 @@ class MultinoteEcoSystem extends EcoSystem {
             coder_workspace = config.clustername
         }
 
+        // install kubectl and gcloud plugins
         script.withCredentials([script.file(credentialsId: 'jenkins_workspace_gcloud_key', variable: 'SERVICE_ACCOUNT_JSON')]) {
             script.sh "gcloud auth activate-service-account --key-file=${script.env.SERVICE_ACCOUNT_JSON}"
             script.sh "curl -LO \"https://dl.k8s.io/release/\$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\""
@@ -472,10 +466,12 @@ class MultinoteEcoSystem extends EcoSystem {
             script.sh "sudo apt install -y google-cloud-sdk-gke-gcloud-auth-plugin"
         }
 
+        // docker login
         script.withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "cesmarvin-setup", usernameVariable: 'TOKEN_ID', passwordVariable: 'TOKEN_SECRET']]) {
             script.sh "docker login -u ${escapeToken(script.env.TOKEN_ID)} -p ${escapeToken(script.env.TOKEN_SECRET)} registry.cloudogu.com"
         }
 
+        // connect to MN-Cluster via gcloud
         script.withCredentials([script.string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
             def command = script.sh(returnStdout: true, script: "coder ls --search team-ces/$coder_workspace -o json --token ${script.env.token} | .bin/yq '.0.latest_build.resources.0.metadata[] | select(.key == \"Cluster Connection Command\") | .value'")
             script.sh "$command"
@@ -490,8 +486,6 @@ class MultinoteEcoSystem extends EcoSystem {
     }
 
     void build(String doguPath) {
-        gcloudCommand = getGCloudCommand(coder_workspace)
-        script.sh gcloudCommand
         script.env.NAMESPACE="ecosystem"
         script.env.RUNTIME_ENV="remote"
 
