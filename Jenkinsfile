@@ -1,8 +1,8 @@
 
 @Library([
-  'pipe-build-lib',
+  'pipe-build-lib@feature/include_multinodeecosystem',
   'ces-build-lib',
-  'dogu-build-lib'
+  'dogu-build-lib@feature/multinode_ecosystem'
 ]) _
 
 def pipe = new com.cloudogu.sos.pipebuildlib.DoguPipe(this, [
