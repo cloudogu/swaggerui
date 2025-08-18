@@ -239,7 +239,7 @@ timestamps{
                     Git git = new Git(this)
                     GitFlow gitflow = new GitFlow(this, git)
 
-                    MultinoteEcoSystem ecoSystem = new MultinoteEcoSystem(this, "jenkins_workspace_gcloud_key", "automatic_migration_coder_token")
+                    MultiNoteEcoSystem ecoSystem = new MultiNoteEcoSystem(this, "jenkins_workspace_gcloud_key", "automatic_migration_coder_token")
 
                     stage('Checkout') {
                         checkout scm
