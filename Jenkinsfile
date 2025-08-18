@@ -258,18 +258,6 @@ timestamps{
                         ]
                         ecoSystem.setup(defaultSetupConfig)
                     }
-                    stage ("Get Ces-Password") {
-                        script {
-                            initialCesPassword = getInitialCESPassword(MN_CODER_WORKSPACE)
-                            currentBuild.description = "Ces-Password: ${initialCesPassword}"
-                        }
-                    } // Stage Get Ces-Password
-                    stage ("Get External Ip") {
-                        script {
-                            externalClusterIp = getExternalClusterIP(MN_CODER_WORKSPACE)
-                            currentBuild.description += "External IP: ${externalClusterIp}"
-                        }
-                    } // Stage Get Ces-Password
                     stage ("Build") {
                         script {
                             env.NAMESPACE="ecosystem"
@@ -484,15 +472,14 @@ class MultinoteEcoSystem extends EcoSystem {
             script.sh "sudo apt install -y google-cloud-sdk-gke-gcloud-auth-plugin"
         }
 
-         script.withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "cesmarvin-setup", usernameVariable: 'TOKEN_ID', passwordVariable: 'TOKEN_SECRET']]) {
+        script.withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "cesmarvin-setup", usernameVariable: 'TOKEN_ID', passwordVariable: 'TOKEN_SECRET']]) {
             script.sh "docker login -u ${escapeToken(script.env.TOKEN_ID)} -p ${escapeToken(script.env.TOKEN_SECRET)} registry.cloudogu.com"
-         }
+        }
 
-
-         script.withCredentials([script.string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-             def command = script.sh(returnStdout: true, script: "coder ls --search team-ces/$coder_workspace -o json --token ${script.env.token} | .bin/yq '.0.latest_build.resources.0.metadata[] | select(.key == \"Cluster Connection Command\") | .value'")
-             script.sh "$command"
-         }
+        script.withCredentials([script.string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+            def command = script.sh(returnStdout: true, script: "coder ls --search team-ces/$coder_workspace -o json --token ${script.env.token} | .bin/yq '.0.latest_build.resources.0.metadata[] | select(.key == \"Cluster Connection Command\") | .value'")
+            script.sh "$command"
+        }
     }
 
     public String getExternalIP() {
