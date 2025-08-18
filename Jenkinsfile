@@ -478,7 +478,7 @@ class MultinoteEcoSystem extends EcoSystem {
         // setup coder
         script.withCredentials([script.string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
             script.sh "curl -L https://coder.com/install.sh | sh"
-            script.sh "coder login https://coder.cloudogu.com --token $token"
+            script.sh "coder login https://coder.cloudogu.com --token ${script.env.token}"
         }
 
         createMNParameter(config.dependencies, [])
@@ -493,7 +493,7 @@ class MultinoteEcoSystem extends EcoSystem {
                        --verbose \
                        --rich-parameter-file 'integrationTests/mn_params_modified.yaml' \
                        --yes \
-                       --token $token \
+                       --token ${script.env.token} \
                        $coder_workspace
                 """
             }
