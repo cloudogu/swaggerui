@@ -240,36 +240,35 @@ timestamps{
                     GitFlow gitflow = new GitFlow(this, git)
 
                     MultiNodeEcoSystem ecoSystem = new MultiNodeEcoSystem(this, "jenkins_workspace_gcloud_key", "automatic_migration_coder_token")
-
-                    stage('Checkout') {
-                        checkout scm
-                        sh 'git submodule update --init'
-                    }
-                    stage('Setup') {
-                        def defaultSetupConfig = [
-                            clustername: ClusterName
-                        ]
-                        ecoSystem.setup(defaultSetupConfig)
-                    }
-                    stage ("Build") {
-                        script {
+                    try {
+                        stage('Checkout') {
+                            checkout scm
+                            sh 'git submodule update --init'
+                        }
+                        stage('Setup') {
+                            def defaultSetupConfig = [
+                                clustername: ClusterName
+                            ]
+                            ecoSystem.setup(defaultSetupConfig)
+                        }
+                        stage ("Build") {
                             env.NAMESPACE="ecosystem"
                             env.RUNTIME_ENV="remote"
                             ecoSystem.build(doguName)
                         }
-                    }
-                    stage ("Wait for Dogu") {
-                        script {
+                        stage ("Wait for Dogu") {
                             ecoSystem.waitForDogu(doguName)
                         }
-                    }
-                    stage("Run Integration Tests") {
-                        script {
+                        stage("Run Integration Tests") {
                             ecoSystem.runCypressIntegrationTests([
                                 cypressImage         : "cypress/included:13.15.2",
                                 enableVideo          : params.EnableVideoRecording,
                                 enableScreenshots    : params.EnableScreenshotRecording
                             ])
+                        }
+                    } finally {
+                        stage ("Cleaunup Workspace") {
+                            ecoSystem.destroy()
                         }
                     }
                 } // script
