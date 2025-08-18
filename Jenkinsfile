@@ -482,8 +482,8 @@ class MultinoteEcoSystem extends EcoSystem {
 
     public String getExternalIP() {
         script.withCredentials([script.string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-            ip = script.sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
-            return ip
+            def ip = script.sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
+            return "$ip"
         }
     }
 
