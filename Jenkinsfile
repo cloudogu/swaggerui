@@ -270,67 +270,24 @@ timestamps{
                             currentBuild.description += "External IP: ${externalClusterIp}"
                         }
                     } // Stage Get Ces-Password
-                    stage ("Authenticate to GCloud") {
+                    stage ("Build") {
                         script {
-                            withCredentials([file(credentialsId: 'jenkins_workspace_gcloud_key', variable: 'SERVICE_ACCOUNT_JSON')]) {
-                                sh "gcloud auth activate-service-account --key-file=$SERVICE_ACCOUNT_JSON"
-                                sh "curl -LO \"https://dl.k8s.io/release/\$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\""
-                                sh "chmod +x kubectl"
-                                sh "sudo mv kubectl /usr/local/bin/"
-                                sh "echo \"deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main\" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list"
-                                sh "curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -"
-                                sh "sudo apt update"
-                                sh "sudo apt install -y google-cloud-sdk-gke-gcloud-auth-plugin"
-                            }
-                        }
-                    }
-                    stage ("Authenticate to Docker") {
-                        script {
-                            withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId   : "cesmarvin-setup", usernameVariable: 'TOKEN_ID', passwordVariable: 'TOKEN_SECRET']]) {
-                                sh "docker login -u ${escapeToken(env.TOKEN_ID)} -p ${escapeToken(env.TOKEN_SECRET)} registry.cloudogu.com"
-                            }
-                        }
-                    }
-                    stage ("Install Dogu to MN") {
-                        script {
-                            gcloudCommand = getGCloudCommand(MN_CODER_WORKSPACE)
-                            sh gcloudCommand
                             env.NAMESPACE="ecosystem"
                             env.RUNTIME_ENV="remote"
-                            sh "make build"  // target from k8s-dogu.mk
-                            while(true) {
-                                def setupStatus = "init"
-                                try {
-                                    setupStatus = sh(returnStdout: true, script: "coder ssh $MN_CODER_WORKSPACE \"kubectl get dogus --namespace=ecosystem $doguName -o jsonpath='{.status.health}'\"")
-                                    echo setupStatus
-                                    if (setupStatus == "available") {
-                                        break
-                                    }
-                                } catch (Exception err) {
-                                    // this is okay
-                                }
-                                sleep(time: 10, unit: 'SECONDS')
-                            }
+                            ecoSystem.build($doguName)
+                        }
+                    }
+                    stage ("Wait for Dogu") {
+                        script {
+                            ecoSystem.waitForDogu($doguName)
                         }
                     }
                     stage("Run Integration Tests") {
-                        Cypress cypress = new Cypress(this, [
-                           cypressImage         : "cypress/included:13.15.2",
-                           enableVideo          : params.EnableVideoRecording,
-                           enableScreenshots    : params.EnableScreenshotRecording
+                        ecoSystem.runCypressIntegrationTests([
+                                cypressImage         : "cypress/included:13.15.2",
+                                enableVideo          : params.EnableVideoRecording,
+                                enableScreenshots    : params.EnableScreenshotRecording
                         ])
-                        try {
-                            def newUrl = "https://$externalClusterIp"
-
-                            // Sed-Befehl für Linux/macOS
-                            sh """
-                            sed -i 's|baseUrl: .*|baseUrl: "${newUrl}",|' ./integrationTests/cypress.config.ts
-                            """
-                            cypress.preTestWork()
-                            cypress.runIntegrationTests(ecoSystem)
-                        } finally {
-                            cypress.archiveVideosAndScreenshots()
-                        }
                     }
                 } // script
             } // node
@@ -441,11 +398,6 @@ boolean developHasChanged(String releaseBranchName){
     }
 }
 
-static def escapeToken(String token) {
-    token = token.replaceAll("\\\$", '\\\\\\\$')
-    return token
-}
-
 class MultinoteEcoSystem extends EcoSystem {
 
     def CODER_SUFFIX = UUID.randomUUID().toString().substring(0,12)
@@ -520,11 +472,31 @@ class MultinoteEcoSystem extends EcoSystem {
             coder_workspace = config.clustername
         }
 
+        script.withCredentials([file(credentialsId: 'jenkins_workspace_gcloud_key', variable: 'SERVICE_ACCOUNT_JSON')]) {
+            script.sh "gcloud auth activate-service-account --key-file=${script.env.SERVICE_ACCOUNT_JSON}"
+            script.sh "curl -LO \"https://dl.k8s.io/release/\$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\""
+            script.sh "chmod +x kubectl"
+            script.sh "sudo mv kubectl /usr/local/bin/"
+            script.sh "echo \"deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main\" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list"
+            script.sh "curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -"
+            script.sh "sudo apt update"
+            script.sh "sudo apt install -y google-cloud-sdk-gke-gcloud-auth-plugin"
+        }
+
+         script.withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "cesmarvin-setup", usernameVariable: 'TOKEN_ID', passwordVariable: 'TOKEN_SECRET']]) {
+            script.sh "docker login -u ${escapeToken(script.env.TOKEN_ID)} -p ${escapeToken(script.env.TOKEN_SECRET)} registry.cloudogu.com"
+         }
+
+
+         script.withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
+             command = sh(returnStdout: true, script: "coder ls --search team-ces/$coder_workspace -o json --token ${script.env.token} | .bin/yq '.0.latest_build.resources.0.metadata[] | select(.key == \"Cluster Connection Command\") | .value'")
+             script.sh command
+         }
     }
 
     public String getExternalIP() {
         script.withCredentials([string(credentialsId: 'automatic_migration_coder_token', variable: 'token')]) {
-            ip = sh(returnStdout: true, script: "coder ssh $workspace \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
+            ip = sh(returnStdout: true, script: "coder ssh $coder_workspace \"kubectl get services --namespace=ecosystem ces-loadbalancer -o jsonpath='{.spec.loadBalancerIP}'\"")
             return ip
         }
     }
@@ -556,11 +528,28 @@ class MultinoteEcoSystem extends EcoSystem {
         }
     }
 
+    void runCypressIntegrationTests(config = [:]) {
+        Cypress cypress = new Cypress(this.script, config)
+        def ip = getExternalIP()
+        def newUrl = "https://$ip"
+
+        // Sed-Befehl für Linux/macOS
+        sh """
+        sed -i 's|baseUrl: .*|baseUrl: "${newUrl}",|' ./integrationTests/cypress.config.ts
+        """
+        try {
+            cypress.preTestWork()
+            cypress.runIntegrationTests(this)
+        } finally {
+            cypress.archiveVideosAndScreenshots()
+        }
+    }
+
     void createMNParameter(List dogusToAdd = [], List componentsToAdd = []) {
         def inputFile = 'integrationTests/mn_params.yaml'
         def outputFile = 'integrationTests/mn_params_modified.yaml'
 
-        def yamlData = readYaml file: inputFile
+        def yamlData = script.readYaml file: inputFile
 
         // Listen initialisieren, falls null
         yamlData['Additional dogus'] = yamlData['Additional dogus'] ?: []
@@ -586,5 +575,10 @@ class MultinoteEcoSystem extends EcoSystem {
 
         script.echo "Modified YAML written to ${outputFile}"
         return outputFile
+    }
+
+    String escapeToken(String token) {
+        token = token.replaceAll("\\\$", '\\\\\\\$')
+        return token
     }
 }
