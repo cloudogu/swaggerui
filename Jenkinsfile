@@ -505,7 +505,7 @@ class MultinoteEcoSystem extends EcoSystem {
             } catch (Exception err) {
                 // this is okay
             }
-            sleep(time: 10, unit: 'SECONDS')
+            script.sleep(time: 10, unit: 'SECONDS')
             counter++
         }
     }
