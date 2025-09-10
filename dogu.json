@@ -1,6 +1,6 @@
 {
   "Name": "official/swaggerui",
-  "Version": "5.29.0-0",
+  "Version": "5.29.0-1",
   "DisplayName": "Swagger UI",
   "Description": "Swagger UI displays your openAPI specification.",
   "Logo": "https://github.com/cloudogu/swagger-ui/blob/main/src/img/logo_small.png?raw=true",
