@@ -6,6 +6,10 @@ Technische Details zu einem Release finden Sie im zugehörigen [Changelog](https
 
 ## [Unreleased]
 
+## [v5.29.0-1] - 2025-09-10
+### Geändert
+- [#71] Das Dogu bietet nun die Swagger UI-Version 5.20.0 an.
+
 ## [v5.28.1-1] - 2025-09-03
 ### Geändert
 - [#66] Das Dogu bietet nun die Swagger UI-Version 5.28.1 an.
