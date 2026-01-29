@@ -6,6 +6,10 @@ Technical details on a release can be found in the corresponding [Changelog](htt
 
 ## [Unreleased]
 
+## [v5.31.0-2] - 2026-01-29
+### Security
+- [#84] CVE fixed: [cve-2025-15467](https://avd.aquasec.com/nvd/2025/cve-2025-15467/)
+
 ## [v5.31.0-1] - 2026-01-22
 ### Changed
 - [#80] The Dogu now offers the Swagger UI version 5.31.0.
