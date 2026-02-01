@@ -5,6 +5,12 @@ Im Folgenden finden Sie die Release Notes für das Swagger UI-Dogu.
 Technische Details zu einem Release finden Sie im zugehörigen [Changelog](https://docs.cloudogu.com/de/docs/dogus/swaggerui/CHANGELOG/).
 ## [Unreleased]
 
+## [v5.18.2-5] - 2026-02-01
+
+### Security
+- Geschlossene Sicherheitslücke: [cve-2025-15467](https://avd.aquasec.com/nvd/2025/cve-2025-15467/)
+
+
 ## [v5.18.2-4] - 2025-02-12
 
 ## [v5.18.2-3] - 2025-01-22
