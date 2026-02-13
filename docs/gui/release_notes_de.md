@@ -6,6 +6,12 @@ Technische Details zu einem Release finden Sie im zugehörigen [Changelog](https
 
 ## [Unreleased]
 
+## [v5.31.0-3] - 2026-02-13
+### Changed
+* [#259] Aktualisieren von Basis-Image auf `3.22.0-6`
+### Security
+* [#259] Sicherheitslücke geschlossen [cve-2025-68121](https://avd.aquasec.com/nvd/2025/cve-2025-68121/)
+
 ## [v5.31.0-2] - 2026-01-29
 ### Security
 - [#84] Sicherheitslücke geschlossen [cve-2025-15467](https://avd.aquasec.com/nvd/2025/cve-2025-15467/)
