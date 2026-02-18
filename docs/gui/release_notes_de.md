@@ -6,6 +6,9 @@ Technische Details zu einem Release finden Sie im zugehörigen [Changelog](https
 
 ## [Unreleased]
 
+## [v5.31.0-4] - 2026-02-18
+- Wir haben nur technische Änderungen vorgenommen. Näheres finden Sie in den Changelogs.
+
 ## [v5.31.0-3] - 2026-02-13
 ### Changed
 * [#259] Aktualisieren von Basis-Image auf `3.22.0-6`
