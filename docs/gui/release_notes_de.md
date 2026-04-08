@@ -6,6 +6,10 @@ Technische Details zu einem Release finden Sie im zugehörigen [Changelog](https
 
 ## [Unreleased]
 
+## [v5.32.2-1] - 2026-04-08
+- [#90] Swagger-UI auf 5.32.2 aktualisiert
+- [#90] Basis-Image auf 3.23.3-6 aktualisiert
+
 ## [v5.31.0-4] - 2026-02-18
 - Wir haben nur technische Änderungen vorgenommen. Näheres finden Sie in den Changelogs.
 

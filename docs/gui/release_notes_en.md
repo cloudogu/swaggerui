@@ -6,6 +6,10 @@ Technical details on a release can be found in the corresponding [Changelog](htt
 
 ## [Unreleased]
 
+## [v5.32.2-1] - 2026-04-08
+- [#90] Upgrade swagger-ui to 5.32.2
+- [#90] Update base image to 3.23.3-6
+
 ## [v5.31.0-4] - 2026-02-18
 - We have only made technical changes. You can find more details in the changelogs.
 
