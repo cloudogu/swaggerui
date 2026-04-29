@@ -7,9 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v5.32.4-1] - 2026-04-29
+### Changed
+- [#120] Upgrade Swagger UI to 5.32.4
+
+### Security
+- [#121] Fix [CVE-2026-31789](https://nvd.nist.gov/vuln/detail/CVE-2026-31789)
+
 ## [v5.32.2-1] - 2026-04-08
 ### Changed
-- [#90] Upgrade swagger-ui to 5.32.2
+- [#90] Upgrade Swagger UI to 5.32.2
 - [#90] Update base image to 3.23.3-6
 
 ## [v5.31.0-4] - 2026-02-18
@@ -27,72 +34,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v5.31.0-1] - 2026-01-22
 ### Changed
-- [#80] Upgrade swagger-ui to 5.31.0
+- [#80] Upgrade Swagger UI to 5.31.0
 - [#80] Update base image to 3.22.0-5
 
 ## [v5.29.5-1] - 2025-10-20
 ### Changed
-- [#77] Update swagger-ui to 5.29.5
+- [#77] Update Swagger UI to 5.29.5
 
 ## [v5.29.4-1] - 2025-10-14
 ### Changed
-- [#75] Update swagger-ui to 5.29.4
+- [#75] Update Swagger UI to 5.29.4
 
 ## [v5.29.1-1] - 2025-09-30
 ### Changed
-- [#73] Update swagger-ui to 5.29.1
+- [#73] Update Swagger UI to 5.29.1
 
 ## [v5.29.0-1] - 2025-09-10
 ### Changed
-- [#71] Update swagger-ui to 5.29.0
+- [#71] Update Swagger UI to 5.29.0
 
 ## [v5.28.1-1] - 2025-09-03
 ### Changed
-- [#66] Update swagger-ui to 5.28.1
+- [#66] Update Swagger UI to 5.28.1
 
 ## [v5.27.1-1] - 2025-08-04
 ### Changed
-- [#64] Update swagger-ui to 5.27.1
+- [#64] Update Swagger UI to 5.27.1
 - [#64] Update base image to 3.22.0-4
 
 ## [v5.26.2-1] - 2025-07-08
 ### Changed
-- [#60] Update swagger-ui to 5.26.2
+- [#60] Update Swagger UI to 5.26.2
 
 ## [v5.26.0-1] - 2025-07-03
 ### Changed
-- [#58] Update swagger-ui to 5.26.0
+- [#58] Update Swagger UI to 5.26.0
 
 ## [v5.25.2-1] - 2025-06-18
 ### Changed
-- [#56] Update swagger-ui to 5.25.2
+- [#56] Update Swagger UI to 5.25.2
 - [#56] Update cypress to 13.17.0
 - [#56] Update Base Image to v3.22.0-2
  
 ## [v5.24.1-1] - 2025-06-16
 ### Changed
-- [#54] Update swagger-ui to 5.24.1
+- [#54] Update Swagger UI to 5.24.1
 
 ## [v5.22.0-1] - 2025-05-28
 ### Changed
-- [#52] Update swagger-ui to 5.22.0
+- [#52] Update Swagger UI to 5.22.0
 
 ## [v5.21.0-2] - 2025-04-29
 - [#50] Set sensible resource requests and limits
 
 ## [v5.21.0-1] - 2025-04-14
-- [#48] Update swagger-ui to 5.21.0
+- [#48] Update Swagger UI to 5.21.0
 
 ## [v5.20.8-1] - 2025-04-11
 ### Changed
 - [#46] Update Makefiles to 9.9.1
-- [#46] Update swagger-ui to 5.20.8
+- [#46] Update Swagger UI to 5.20.8
 - [#46] Update dogu-build-lib to 3.2.0 and ces-build-lib to 4.2.0
 
 ## [v5.19.0-1] - 2025-02-26
 ### Changed
 - [#44] Update Makefiles to 9.5.3
-- [#44] Update swagger-ui to 5.19.0
+- [#44] Update Swagger UI to 5.19.0
 - [#44] Update dogu-build-lib to 3.1.0 and ces-build-lib to 4.1.0
 
 ## [v5.18.2-4] - 2025-02-12
@@ -113,11 +120,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update cypress/included:13.15.2
 - Update github.com/cloudogu/ces-build-lib@3.0.0
 - Update base image to version 3.20.3-3
-- Update swagger-ui to 5.18.2 
+- Update Swagger UI to 5.18.2 
 
 ## [v5.17.14-1] - 2024-10-18
-- dismiss special fork from swagger-ui (#31)
-- Update swagger-ui to 5.17.14 (#31)
+- dismiss special fork from Swagger UI (#31)
+- Update Swagger UI to 5.17.14 (#31)
 
 ### Changed
 - Update base image to alpine 3.20.3 (#31)
@@ -147,7 +154,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade ssl libraries to 1.1.1n-r0 and fix [CVE-2022-0778](https://security.alpinelinux.org/vuln/CVE-2022-0778)
 
 ### Changed
-- Update swagger-ui to 4.9.0-1 (#12)
+- Update Swagger UI to 4.9.0-1 (#12)
   - This also includes the change that the google fonts are added to repository (#12) 
 - Add update-test to jenkinsfile (#12)
 - Upgrade base image to 3.15.3-1

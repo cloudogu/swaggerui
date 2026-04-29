@@ -6,11 +6,20 @@ Technical details on a release can be found in the corresponding [Changelog](htt
 
 ## [Unreleased]
 
+## [v5.32.4-1] - 2026-04-29
+### Changed
+- [#120] Upgrade Swagger UI to 5.32.4
+
+### Security
+- [#121] Fix [CVE-2026-31789](https://nvd.nist.gov/vuln/detail/CVE-2026-31789)
+
 ## [v5.32.2-1] - 2026-04-08
-- [#90] Upgrade swagger-ui to 5.32.2
+### Changed
+- [#90] Upgrade Swagger UI to 5.32.2
 - [#90] Update base image to 3.23.3-6
 
 ## [v5.31.0-4] - 2026-02-18
+### Changed
 - We have only made technical changes. You can find more details in the changelogs.
 
 ## [v5.31.0-3] - 2026-02-13
@@ -99,8 +108,8 @@ We have only made technical changes. You can find more details in the changelogs
 
 ## Release 5.17.14-1
 - The Dogu now offers the Swagger UI version 5.17.14.
-- The [Major-Release](https://github.com/swagger-api/swagger-ui/releases/tag/v5.0.0) supports [OpenAPI 3.1.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.1.0.md) applications
-- The release notes of Swagger UI can be found in the [Changelog of swagger-ui](https://github.com/swagger-api/swagger-ui/releases?page=1)
+- The [Major-Release](https://github.com/swagger-api/Swagger UI/releases/tag/v5.0.0) supports [OpenAPI 3.1.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.1.0.md) applications
+- The release notes of Swagger UI can be found in the [Changelog of Swagger UI](https://github.com/swagger-api/Swagger UI/releases?page=1)
 
 ## Release 4.9.0-5
 - Relicense own code to AGPL-3-only
@@ -121,4 +130,4 @@ We have only made technical changes. You can find more details in the changelogs
 
 **The release fixes critical security vulnerabilities ([CVE-2018-25032](https://security.alpinelinux.org/vuln/CVE-2018-25032), [CVE-2022-0778](https://security.alpinelinux.org/vuln/CVE-2022-0778)). An update is therefore recommended.**
 
-* The Dogu now offers the Swagger UI version 4.9.0. The release notes of Swagger UI can be found [here](https://github.com/swagger-api/swagger-ui/releases/tag/v4.9.0).
+* The Dogu now offers the Swagger UI version 4.9.0. The release notes of Swagger UI can be found [here](https://github.com/swagger-api/Swagger UI/releases/tag/v4.9.0).

@@ -1,21 +1,21 @@
 {
   "dependencies": {
-    "@badeball/cypress-cucumber-preprocessor": "^19.2.0",
+    "@badeball/cypress-cucumber-preprocessor": "^24.0.0",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.1",
-    "@cloudogu/dogu-integration-test-library": "6.1.1",
-    "cypress": "13.17.0",
-    "esbuild": "^0.21.5",
+    "@cloudogu/dogu-integration-test-library": "6.2.0",
+    "cypress": "15.14.1",
+    "esbuild": "^0.28.0",
     "seedrandom": "^3.0.5", 
-    "typescript": "^5.5.2"
+    "typescript": "^6.0.0"
   },
   "resolutions": {
     "@cypress/request": "^3.0.0",
-    "qs": "6.13.0",
+    "qs": "6.15.1",
     "braces": "3.0.3",
-    "cross-spawn": "7.0.5",
-    "minimatch": "^9.0.4",
+    "cross-spawn": "7.0.6",
+    "minimatch": "^10.0.0",
     "semver": "^7.5.3",
-    "glob": "^9.3.2",
+    "glob": "^13.0.0",
     "reflect-metadata": "^0.2.2"
   },
   "scripts": {
