@@ -8,6 +8,9 @@ Technische Details zu einem Release finden Sie im zugehörigen [Changelog](https
 ### Changed
 - [#120] Swagger UI auf 5.32.4 aktualisiert
 
+### Security
+- [#121] [CVE-2026-31789](https://nvd.nist.gov/vuln/detail/CVE-2026-31789) behoben
+
 ## [v5.32.2-1] - 2026-04-08
 ### Changed
 - [#90] Swagger UI auf 5.32.2 aktualisiert
