@@ -8,6 +8,9 @@ Technical details on a release can be found in the corresponding [Changelog](htt
 ### Changed
 - [#120] Upgrade Swagger UI to 5.32.4
 
+### Security
+- [#121] Fix [CVE-2026-31789](https://nvd.nist.gov/vuln/detail/CVE-2026-31789)
+
 ## [v5.32.2-1] - 2026-04-08
 ### Changed
 - [#90] Upgrade Swagger UI to 5.32.2
