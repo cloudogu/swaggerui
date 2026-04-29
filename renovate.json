@@ -6,8 +6,9 @@
   "ignorePaths": [
     "/build/**"
   ],
-  "regexManagers": [
+  "customManagers": [
     {
+      "customType": "regex",
       "fileMatch": [
         "(^|/)Dockerfile$"
       ],
