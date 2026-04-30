@@ -6,14 +6,11 @@
   "ignorePaths": [
     "/build/**"
   ],
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": [
-        "(^|/)Dockerfile$"
-      ],
-      "matchStrings": [
-        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)(?: extractVersion=(?<extractVersion>.*?))?\\s(?:ENV|ARG) .*?_VERSION=(?<currentValue>.*)\\s"
-      ]
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)Dockerfile$/"],
+      "matchStrings": ["# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)(?: extractVersion=(?<extractVersion>.*?))?\\s(?:ENV|ARG) .*?_VERSION=(?<currentValue>.*)\\s"]
     }
   ]
 }
