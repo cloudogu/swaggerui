@@ -6,6 +6,9 @@
   "ignorePaths": [
     "/build/**"
   ],
+  "configMigration": true,
+  "minimumReleaseAge": "7 days",
+  "timezone": "Europe/Berlin",
   "customManagers": [
     {
       "customType": "regex",
