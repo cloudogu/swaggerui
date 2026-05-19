@@ -9,24 +9,14 @@
   "configMigration": true,
   "minimumReleaseAge": "7 days",
   "timezone": "Europe/Berlin",
-  "customManagers": [
-    {
-      "customType": "regex",
-      "managerFilePatterns": [
-        "/(^|/)Dockerfile$/"
-      ],
-      "matchStrings": [
-        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)(?: extractVersion=(?<extractVersion>.*?))?\\s(?:ENV|ARG) .*?_VERSION=(?<currentValue>\\S+)\\s"
-      ]
-    },
-    {
-      "customType": "regex",
-      "managerFilePatterns": [
-        "/(^|/)Makefile$/"
-      ],
-      "matchStrings": [
-        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)(?: extractVersion=(?<extractVersion>.*?))?\\s+MAKEFILES_VERSION\\s*=\\s*(?<currentValue>\\S+)\\s"
-      ]
-    }
-  ]
+  "extends": [
+    "customManagers:dockerfileVersions",
+    "customManagers:makefileVersions"
+  ],
+  "postUpgradeTasks": {
+    "commands": [
+      "make update-makefiles"
+    ],
+    "executionMode": "update"
+  }
 }
