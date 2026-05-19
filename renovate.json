@@ -12,8 +12,21 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/(^|/)Dockerfile$/"],
-      "matchStrings": ["# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)(?: extractVersion=(?<extractVersion>.*?))?\\s(?:ENV|ARG) .*?_VERSION=(?<currentValue>.*)\\s"]
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)(?: extractVersion=(?<extractVersion>.*?))?\\s(?:ENV|ARG) .*?_VERSION=(?<currentValue>\\S+)\\s"
+      ]
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)Makefile$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)(?: extractVersion=(?<extractVersion>.*?))?\\s+MAKEFILES_VERSION\\s*=\\s*(?<currentValue>\\S+)\\s"
+      ]
     }
   ]
 }
