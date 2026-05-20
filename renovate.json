@@ -12,10 +12,35 @@
     "customManagers:dockerfileVersions",
     "customManagers:makefileVersions"
   ],
-  "postUpgradeTasks": {
-    "commands": [
-      "make update-makefiles"
-    ],
-    "executionMode": "update"
-  }
+  "packageRules": [
+    {
+      "description": "Keep build/ in sync",
+      "matchDatasources": [
+        "github-tags"
+      ],
+      "matchDepNames": [
+        "cloudogu/makefiles"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "make update-makefiles"
+        ],
+        "fileFilters": [
+          "Makefile",
+          "build/**"
+        ],
+        "executionMode": "branch"
+      }
+    },
+    {
+      "description": "No delay for self-made deps",
+      "matchDatasources": [
+        "github-tags"
+      ],
+      "matchDepNames": [
+        "cloudogu/**"
+      ],
+      "minimumReleaseAge": "0 days"
+    }
+  ]
 }
