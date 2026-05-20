@@ -4,7 +4,7 @@
     "develop"
   ],
   "ignorePaths": [
-    "/build/**"
+    "build/**"
   ],
   "configMigration": true,
   "minimumReleaseAge": "7 days",
