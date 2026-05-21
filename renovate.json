@@ -8,6 +8,7 @@
   ],
   "configMigration": true,
   "minimumReleaseAge": "7 days",
+  "semanticCommits": "enabled",
   "extends": [
     "customManagers:dockerfileVersions",
     "customManagers:makefileVersions"
