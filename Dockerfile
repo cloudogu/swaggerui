@@ -9,7 +9,7 @@ RUN unzip /tmp/swagger-ui.zip -d /tmp && mv /tmp/swagger-ui-${SWAGGERUI_VERSION}
 # renovate: datasource=github-tags depName=cloudogu/base
 FROM registry.cloudogu.com/official/base:3.23.4-2
 LABEL NAME="official/swaggerui" \
-      VERSION="5.32.6-0" \
+      VERSION="5.32.6-1" \
       maintainer="hello@cloudogu.com"
 
 ENV SERVICE_TAGS=webapp \
