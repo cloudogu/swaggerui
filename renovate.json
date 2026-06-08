@@ -4,16 +4,44 @@
     "develop"
   ],
   "ignorePaths": [
-    "/build/**"
+    "build/**"
   ],
-  "regexManagers": [
+  "configMigration": true,
+  "minimumReleaseAge": "7 days",
+  "semanticCommits": "enabled",
+  "extends": [
+    "customManagers:dockerfileVersions",
+    "customManagers:makefileVersions"
+  ],
+  "packageRules": [
     {
-      "fileMatch": [
-        "(^|/)Dockerfile$"
+      "description": "Keep build/ in sync",
+      "matchDatasources": [
+        "github-tags"
       ],
-      "matchStrings": [
-        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)(?: extractVersion=(?<extractVersion>.*?))?\\s(?:ENV|ARG) .*?_VERSION=(?<currentValue>.*)\\s"
-      ]
+      "matchDepNames": [
+        "cloudogu/makefiles"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "make update-makefiles"
+        ],
+        "fileFilters": [
+          "Makefile",
+          "build/**"
+        ],
+        "executionMode": "branch"
+      }
+    },
+    {
+      "description": "No delay for self-made deps",
+      "matchDatasources": [
+        "github-tags"
+      ],
+      "matchDepNames": [
+        "cloudogu/**"
+      ],
+      "minimumReleaseAge": "0 days"
     }
   ]
 }

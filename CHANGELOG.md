@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v5.32.6-1] - 2026-06-08
+### Changed
+- [#136] Upgrade Swagger UI to v5.32.6
+- [#136] Update base image to v3.23.4-2
+
 ## [v5.32.4-1] - 2026-04-29
 ### Changed
 - [#120] Upgrade Swagger UI to 5.32.4
+- [#121] Update base image to 3.23.4-1
 
 ### Security
 - [#121] Fix [CVE-2026-31789](https://nvd.nist.gov/vuln/detail/CVE-2026-31789)
