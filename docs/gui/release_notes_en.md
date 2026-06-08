@@ -8,15 +8,15 @@ Technical details on a release can be found in the corresponding [Changelog](htt
 
 ## [v5.32.4-1] - 2026-04-29
 ### Changed
-- [#120] Upgrade Swagger UI to 5.32.4
+- Upgrade Swagger UI to 5.32.4
 
 ### Security
-- [#121] Fix [CVE-2026-31789](https://nvd.nist.gov/vuln/detail/CVE-2026-31789)
+- Fix [CVE-2026-31789](https://nvd.nist.gov/vuln/detail/CVE-2026-31789)
 
 ## [v5.32.2-1] - 2026-04-08
 ### Changed
-- [#90] Upgrade Swagger UI to 5.32.2
-- [#90] Update base image to 3.23.3-6
+- Upgrade Swagger UI to 5.32.2
+- Update base image to 3.23.3-6
 
 ## [v5.31.0-4] - 2026-02-18
 ### Changed
@@ -24,61 +24,61 @@ Technical details on a release can be found in the corresponding [Changelog](htt
 
 ## [v5.31.0-3] - 2026-02-13
 ### Changed
-* [#259] Update base-image to `3.22.0-6`
+* Update base-image to `3.22.0-6`
 ### Security
-* [#259] CVE fixed [cve-2025-68121](https://avd.aquasec.com/nvd/2026/cve-2025-68121/)
+* CVE fixed [cve-2025-68121](https://avd.aquasec.com/nvd/2026/cve-2025-68121/)
 
 ## [v5.31.0-2] - 2026-01-29
 ### Security
-- [#84] CVE fixed: [cve-2025-15467](https://avd.aquasec.com/nvd/2025/cve-2025-15467/)
+- CVE fixed: [cve-2025-15467](https://avd.aquasec.com/nvd/2025/cve-2025-15467/)
 
 ## [v5.31.0-1] - 2026-01-22
 ### Changed
-- [#80] The Dogu now offers the Swagger UI version 5.31.0.
+- The Dogu now offers the Swagger UI version 5.31.0.
 
 ## [v5.29.5-1] - 2025-10-20
 ### Changed
-- [#77] The Dogu now offers the Swagger UI version 5.29.5.
+- The Dogu now offers the Swagger UI version 5.29.5.
 
 ## [v5.29.4-1] - 2025-10-14
 ### Changed
-- [#75] The Dogu now offers the Swagger UI version 5.29.4.
+- The Dogu now offers the Swagger UI version 5.29.4.
 
 ## [v5.29.1-1] - 2025-09-30
 ### Changed
-- [#73] The Dogu now offers the Swagger UI version 5.29.1.
+- The Dogu now offers the Swagger UI version 5.29.1.
 
 ## [v5.29.0-1] - 2025-09-10
 ### Changed
-- [#71] The Dogu now offers the Swagger UI version 5.29.0.
+- The Dogu now offers the Swagger UI version 5.29.0.
 
 ## [v5.28.1-1] - 2025-09-03
 ### Changed
-- [#66] The Dogu now offers the Swagger UI version 5.28.1.
+- The Dogu now offers the Swagger UI version 5.28.1.
 
 ## [v5.27.1-1] - 2025-08-04
 ### Changed
-- [#64] The Dogu now offers the Swagger UI version 5.27.1.
+- The Dogu now offers the Swagger UI version 5.27.1.
 
 ## [v5.26.2-1] - 2025-07-08
 ### Changed
-- [#60] The Dogu now offers the Swagger UI version 5.26.2.
+- The Dogu now offers the Swagger UI version 5.26.2.
 
 ## [v5.26.0-1] - 2025-07-03
 ### Changed
-- [#58] The Dogu now offers the Swagger UI version 5.26.0.
+- The Dogu now offers the Swagger UI version 5.26.0.
 
 ## [v5.25.2-1] - 2025-06-18
 ### Changed
-- [#54] The Dogu now offers the Swagger UI version 5.25.2.
+- The Dogu now offers the Swagger UI version 5.25.2.
 
 ## [v5.24.1-1] - 2025-06-16
 ### Changed
-- [#54] The Dogu now offers the Swagger UI version 5.24.1.
+- The Dogu now offers the Swagger UI version 5.24.1.
 
 ## [v5.22.0-1] - 2025-05-28
 ### Changed
-- [#52] The Dogu now offers the Swagger UI version 5.22.0.
+- The Dogu now offers the Swagger UI version 5.22.0.
 
 ## [v5.21.0-2] - 2025-04-29
 ### Changed
