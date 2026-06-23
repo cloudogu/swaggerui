@@ -9,6 +9,10 @@
   "configMigration": true,
   "minimumReleaseAge": "7 days",
   "semanticCommits": "enabled",
+  "constraints": {
+    "node": "22.22.1",
+    "yarn": "1.22.22"
+  },
   "extends": [
     "customManagers:dockerfileVersions",
     "customManagers:makefileVersions"
