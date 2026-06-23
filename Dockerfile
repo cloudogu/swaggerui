@@ -1,15 +1,15 @@
 # renovate: datasource=github-tags depName=cloudogu/base extractVersion=^v?(?<version>.*)$
-FROM registry.cloudogu.com/official/base:3.23.4-2 AS swaggerui
+FROM registry.cloudogu.com/official/base:3.24.0-1 AS swaggerui
 # renovate: datasource=github-tags depName=swagger-api/swagger-ui extractVersion=^v(?<version>.*)$
-ENV SWAGGERUI_VERSION=5.32.6
+ENV SWAGGERUI_VERSION=5.32.7
 RUN apk add --no-cache curl
 RUN curl -Lsk --fail --silent --location --retry 3 https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${SWAGGERUI_VERSION}.zip -o /tmp/swagger-ui.zip
 RUN unzip /tmp/swagger-ui.zip -d /tmp && mv /tmp/swagger-ui-${SWAGGERUI_VERSION}/dist /tmp/dist && rm -f /tmp/swagger-ui.zip
 
 # renovate: datasource=github-tags depName=cloudogu/base extractVersion=^v?(?<version>.*)$
-FROM registry.cloudogu.com/official/base:3.23.4-2
+FROM registry.cloudogu.com/official/base:3.24.0-1
 LABEL NAME="official/swaggerui" \
-      VERSION="5.32.6-1" \
+      VERSION="5.32.7-0" \
       maintainer="hello@cloudogu.com"
 
 ENV SERVICE_TAGS=webapp \
