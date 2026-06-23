@@ -4,12 +4,12 @@
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.1",
     "@cloudogu/dogu-integration-test-library": "6.2.0",
     "cypress": "15.14.2",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "seedrandom": "^3.0.5", 
     "typescript": "^6.0.0"
   },
   "resolutions": {
-    "@cypress/request": "^3.0.0",
+    "@cypress/request": "^4.0.0",
     "qs": "6.15.1",
     "braces": "3.0.3",
     "cross-spawn": "7.0.6",
