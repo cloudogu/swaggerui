@@ -1,5 +1,5 @@
 # renovate: datasource=github-tags depName=cloudogu/base extractVersion=^v?(?<version>.*)$
-FROM registry.cloudogu.com/official/base:3.24.0-1 AS swaggerui
+FROM registry.cloudogu.com/official/base:3.24.1-2 AS swaggerui
 # renovate: datasource=github-tags depName=swagger-api/swagger-ui extractVersion=^v(?<version>.*)$
 ENV SWAGGERUI_VERSION=5.32.9
 RUN apk add --no-cache curl
