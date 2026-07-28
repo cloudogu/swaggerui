@@ -6,6 +6,10 @@ Technische Details zu einem Release finden Sie im zugehörigen [Changelog](https
 
 ## [Unreleased]
 
+## [v5.32.9-1] - 2026-07-28
+### Changed
+- Swagger UI auf 5.32.9 aktualisiert
+
 ## [v5.32.7-1] - 2026-06-23
 ### Changed
 - Swagger UI auf 5.32.7 aktualisiert
