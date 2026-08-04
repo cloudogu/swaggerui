@@ -6,7 +6,7 @@
     "cypress": "15.14.2",
     "esbuild": "^0.28.1",
     "seedrandom": "^3.0.5", 
-    "typescript": "^6.0.0"
+    "typescript": "^7.0.0"
   },
   "resolutions": {
     "@cypress/request": "^4.0.0",
