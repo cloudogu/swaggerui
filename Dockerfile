@@ -1,15 +1,15 @@
 # renovate: datasource=github-tags depName=cloudogu/base extractVersion=^v?(?<version>.*)$
 FROM registry.cloudogu.com/official/base:3.24.1-2 AS swaggerui
 # renovate: datasource=github-tags depName=swagger-api/swagger-ui extractVersion=^v(?<version>.*)$
-ENV SWAGGERUI_VERSION=5.32.9
+ENV SWAGGERUI_VERSION=5.32.11
 RUN apk add --no-cache curl
 RUN curl -Lsk --fail --silent --location --retry 3 https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${SWAGGERUI_VERSION}.zip -o /tmp/swagger-ui.zip
 RUN unzip /tmp/swagger-ui.zip -d /tmp && mv /tmp/swagger-ui-${SWAGGERUI_VERSION}/dist /tmp/dist && rm -f /tmp/swagger-ui.zip
 
 # renovate: datasource=github-tags depName=cloudogu/base extractVersion=^v?(?<version>.*)$
-FROM registry.cloudogu.com/official/base:3.24.0-1
+FROM registry.cloudogu.com/official/base:3.24.1-2
 LABEL NAME="official/swaggerui" \
-      VERSION="5.32.9-1" \
+      VERSION="5.32.11-1" \
       maintainer="hello@cloudogu.com"
 
 ENV SERVICE_TAGS=webapp \
@@ -20,14 +20,14 @@ COPY resources /
 RUN set -x -o errexit -o nounset -o pipefail \
   && apk update \
   && apk upgrade \
-  # install required packages
+  # install required packages \
   && apk --update add openssl pcre zlib nginx \
-  # change owner of nginx binary
+  # change owner of nginx binary \
   && chown root:root /usr/sbin/nginx \
-   # redirect logs
+   # redirect logs \
   && ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log \
-   # cleanup apk cache
+   # cleanup apk cache \
   && rm -rf /var/cache/apk/* \
   && mkdir -p ${NGINX_HOME}
 
