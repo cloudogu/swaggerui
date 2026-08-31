@@ -1523,6 +1523,14 @@ chokidar@^4.0.1:
   dependencies:
     readdirp "^4.0.1"
 
+chrome-remote-interface@0.33.3:
+  version "0.33.3"
+  resolved "https://registry.yarnpkg.com/chrome-remote-interface/-/chrome-remote-interface-0.33.3.tgz#d8b4339f487b460a9461af7355bda98054e8e1a4"
+  integrity sha512-zNnn0prUL86Teru6UCAZ1yU1XeXljHl3gj7OrfPcarEfU62OUU4IujDPdTDW3dAWwRqN3ZMG/Chhkh2gPL/wiw==
+  dependencies:
+    commander "2.11.x"
+    ws "^7.2.0"
+
 ci-info@^3.2.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-3.9.0.tgz#4279a62028a7b1f262f3473fc9605f5e218c59b4"
@@ -1660,6 +1668,11 @@ commander@15.0.0, commander@^15.0.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-15.0.0.tgz#96f3961f12adac1799ef3fbd8bc61d40572d1b11"
   integrity sha512-z67u4ZhzCL/Tydu1lJARtEZYWbWaN7oYLHbsuzocr6y4N6WZAagG3RQ4FW61V1/0+jImpj293XfrcYnd1qxtPg==
 
+commander@2.11.x:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.11.0.tgz#157152fd1e7a6c8d98a5b715cf376df928004563"
+  integrity sha512-b0553uYA5YAEGgyYIGYROzKQ7X5RAqedkfjiZxwi0kL1g3bOaBNNZfYkzt/CL0umgD5wc9Jec2FbB98CjkMRvQ==
+
 commander@9.1.0:
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-9.1.0.tgz#a6b263b2327f2e188c6402c42623327909f2dbec"
@@ -1742,10 +1755,10 @@ cross-spawn@7.0.6, cross-spawn@^7.0.0, cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-cypress@15.20.1:
-  version "15.20.1"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-15.20.1.tgz#60b61b4682523400b55b46ecbe703dd66f26dfab"
-  integrity sha512-7GV3O7vQQG+EVVv9BGs6lCHY49x25jVi/z1+zdjuuq/o3eZeDwmGPJpRYnOWeGvQxTCtkydXWHBPhV8xuGXPLg==
+cypress@15.21.1:
+  version "15.21.1"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-15.21.1.tgz#51653d58fa0e9994a11406aa3df2bee716264f9a"
+  integrity sha512-ogHpHMj0XNlZA5MGzjg8SWHf0eMw9lTwVQRKjpcT1GzNTxNUjwnHA8YCG6nOJ8ThU+XZaUxJgpMYZnJ//8aDaw==
   dependencies:
     "@cypress/request" "^4.0.0"
     "@cypress/xvfb" "^1.2.4"
@@ -1758,6 +1771,7 @@ cypress@15.20.1:
     buffer "^5.7.1"
     cachedir "^2.4.0"
     chalk "^4.1.0"
+    chrome-remote-interface "0.33.3"
     ci-info "^4.1.0"
     cli-table3 "0.6.1"
     commander "^6.2.1"
@@ -4775,6 +4789,11 @@ wrappy@1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==
+
+ws@^7.2.0:
+  version "7.5.13"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.13.tgz#12aa507eaca76c295c278b1aebf4698ab2c1845f"
+  integrity sha512-rsKI6xDBFVf4r/x8XyChGK04QR/XHroxs/jUcoWvtEZM8TPU/X/uIY9B1CsSzYws9ZJb/6bbBu7dPhFW00CAoA==
 
 xmlbuilder@^15.1.1:
   version "15.1.1"
