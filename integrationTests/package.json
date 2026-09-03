@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@badeball/cypress-cucumber-preprocessor": "^26.0.0",
+    "@badeball/cypress-cucumber-preprocessor": "^27.0.0",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
     "@cloudogu/dogu-integration-test-library": "6.2.0",
     "cypress": "15.21.1",
