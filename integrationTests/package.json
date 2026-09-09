@@ -10,7 +10,7 @@
   },
   "resolutions": {
     "@cypress/request": "^4.0.1",
-    "qs": "6.15.3",
+    "qs": "6.16.0",
     "braces": "3.0.3",
     "cross-spawn": "7.0.6",
     "minimatch": "^10.2.6",
