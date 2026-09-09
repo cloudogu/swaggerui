@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- [#168] Update Swagger UI to v5.32.15
+- [#168] Bump base image to v3.24.1-3
 
 ## [v5.32.14-1] - 2026-08-31
 ### Changed
