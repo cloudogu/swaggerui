@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v5.33.0-1] - 2026-09-25
+### Changed
+- [#172] Update Swagger UI to v5.33.0
+- [#172] Update base image to v3.24.2-1
+
 ## [v5.32.15-1] - 2026-09-10
 ### Changed
 - [#168] Update Swagger UI to v5.32.15
