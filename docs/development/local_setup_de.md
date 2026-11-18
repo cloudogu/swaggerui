@@ -3,7 +3,9 @@
 ## Aktualisieren von Swagger UI
 
 Die `Dockerfile` lädt das offizielle [Swagger-UI-Release](https://github.com/swagger-api/swagger-ui/releases)
-in der unter `SWAGGERUI_VERSION` gesetzten Version herunter. Für ein Update muss nur diese Version angepasst werden.
+in der unter `SWAGGERUI_VERSION` gesetzten Version herunter und prüft es gegen `SWAGGERUI_SHA256`.
+Für ein Update müssen beide Werte angepasst werden; die Prüfsumme ergibt sich aus
+`curl -fsSL https://github.com/swagger-api/swagger-ui/archive/refs/tags/v<version>.zip | sha256sum`.
 
 ## Bauen des Dogus
 
