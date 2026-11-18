@@ -1,36 +1,22 @@
 # Setting up the Swagger UI Dogu
 
-## Instruction
+## Updating Swagger UI
 
-(Attention changed since v4.9.0-1)
-```bash
-On the host system
-1. cd swaggerui (into swaggerui dogu repo)
-2. git submodule init
-3. git submodule update (pulls cloudogu/swagger-ui)
-In the local CES
-4. cd swaggerui && cesapp build . && cesapp start swaggerui
-```
+The `Dockerfile` downloads the official [Swagger UI release](https://github.com/swagger-api/swagger-ui/releases)
+in the version set in `SWAGGERUI_VERSION` and verifies it against `SWAGGERUI_SHA256`.
+To update, adjust both values; the checksum is obtained with
+`curl -fsSL https://github.com/swagger-api/swagger-ui/archive/refs/tags/v<version>.zip | sha256sum`.
 
-### Setup since 4.9.0-1
-Releases can be found here https://github.com/cloudogu/swagger-ui/releases.
-please reference new version inside the Dockerfile. The release currently consists only of the dist folder.
-```
-1. create artefact zip
-inside the src repository root (https://github.com/cloudogu/swagger-ui/)
-zip -r swagger-ui-4.9.0-1.zip dist
-2. generate the checksum 
-sha256sum swagger-ui-4.9.0-1.zip > swagger-ui-4.9.0-1.zip.sha256
-3. add the artefacts to the release https://github.com/cloudogu/swagger-ui/releases
+## Building the Dogu
+
+In the local CES (Vagrant), in the root directory of the Dogu:
+```shell
+cesapp build .
+cesapp start swaggerui
 ```
 
-### Setup since 5.17.14-1
-Releases can be found on the official swagger-ui download page.
+In the K8s EcoSystem, configure `.env` (see `.env.template`) and run `make build`.
 
-Only the current version of swagger-ui needs to be adapted in the Dockerfile.
-The fork will be dismissed.
-```
-1. download artefact from "swagger-ui"
-2. generate the checksum "sha256sum swagger-ui.zip"
-3. Edit Dockerfile for new version
-```
+## Integration tests
+
+See [Setup for the integration tests](Setup_Integrationtests_en.md).
