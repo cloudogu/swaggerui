@@ -10,3 +10,4 @@ include build/make/release.mk
 include build/make/prerelease.mk
 include build/make/k8s-dogu.mk
 include build/make/trivyscan.mk
+include build/make/renovate.mk
