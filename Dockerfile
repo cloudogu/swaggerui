@@ -1,7 +1,7 @@
 # renovate: datasource=github-tags depName=cloudogu/base extractVersion=^v?(?<version>.*)$
 FROM registry.cloudogu.com/official/base:3.24.4-1 AS swaggerui
 # renovate: datasource=github-tags depName=swagger-api/swagger-ui extractVersion=^v(?<version>.*)$
-ENV SWAGGERUI_VERSION=5.35.0
+ENV SWAGGERUI_VERSION=5.35.1
 ENV SWAGGERUI_SHA256=3d45cd8edc920a4a37f6c0d6d8b222c104c393ece1bc3ea5ff2bf37597044b50
 RUN apk add --no-cache curl
 RUN curl --fail --silent --show-error --location --retry 3 https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${SWAGGERUI_VERSION}.zip -o /tmp/swagger-ui.zip \
